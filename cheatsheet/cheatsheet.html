@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>M101 Spickzettel</title>
+<style>
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #fff; }
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 6.5pt;
+    line-height: 1.16;
+    color: #111;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.page {
+    width: 210mm;
+    height: 297mm;
+    padding: 5mm 5mm 4mm;
+    overflow: hidden;
+    page-break-after: always;
+    break-after: page;
+    display: flex;
+    flex-direction: column;
+}
+.page:last-child { page-break-after: auto; break-after: auto; }
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1.2pt solid #111;
+    padding-bottom: 1mm;
+    margin-bottom: 1.5mm;
+}
+.top h1 { font-size: 11pt; white-space: nowrap; margin-right: 3mm; }
+.idx { text-align: right; flex: 1; min-width: 0; line-height: 1.6; }
+.idx { font-size: 6.3pt; }
+.idx span { padding: 0 1.2mm; border-radius: 1mm; color: #fff; margin-left: 0.6mm; white-space: nowrap; }
+.cols {
+    flex: 1;
+    column-count: 3;
+    column-gap: 3mm;
+    column-fill: auto;
+    min-height: 0;
+}
+.box { break-inside: auto; margin-bottom: 1.6mm; border-left: 1.4mm solid var(--c); padding-left: 1.4mm; }
+pre, tr, li, p { break-inside: avoid; }
+h2 {
+    font-size: 7pt;
+    color: #fff;
+    background: var(--c);
+    padding: 0.3mm 1.2mm;
+    margin: 0 0 0.6mm -1.4mm;
+    break-after: avoid;
+}
+h3 { font-size: 6.3pt; color: var(--c); margin-top: 0.7mm; break-after: avoid; }
+p, li { margin-bottom: 0.4mm; }
+ul { padding-left: 3mm; }
+code, pre { font-family: Consolas, "DejaVu Sans Mono", monospace; font-size: 5.8pt; }
+code { background: #f1f1f1; padding: 0 0.4mm; }
+pre { background: #f4f4f4; padding: 0.6mm 1mm; margin: 0.4mm 0 0.6mm; white-space: pre-wrap; line-height: 1.15; }
+td { overflow-wrap: break-word; }
+td:first-child { hyphens: none; }
+table { border-collapse: collapse; width: 100%; margin: 0.4mm 0 0.6mm; }
+th, td { border: 0.4pt solid #bbb; padding: 0.2mm 0.7mm; text-align: left; vertical-align: top; }
+th { background: #eee; }
+b { font-weight: bold; }
+.n { color: #888; font-weight: normal; }
+.web { --c: #6a3d9a; }
+.html { --c: #1f5fa8; }
+.css { --c: #1d7a3a; }
+.med { --c: #c25e00; }
+.err { --c: #c0172b; }
+.law { --c: #555; }
+</style>
+</head>
+<body>
+
+<!-- ====================== SEITE 1 ====================== -->
+<section class="page">
+<div class="top">
+    <h1>M101 Spickzettel 1/2 <span class="n" style="font-size:7pt">Webauftritt erstellen &amp; veröffentlichen</span></h1>
+    <div class="idx">
+        <span style="background:#6a3d9a">Web/Projekt 1–2</span> <span style="background:#1f5fa8">HTML 3–8</span> <span style="background:#c25e00">Medien 9–10</span> <span style="background:#555">Recht 11</span> <span style="background:#6a3d9a">Test/Publish 12–13</span>
+        · S.2: <span style="background:#1d7a3a">CSS 14–21</span> <span style="background:#c0172b">Fehler 22</span> <span style="background:#6a3d9a">Fragen 23</span>
+    </div>
+</div>
+<div class="cols">
+
+<div class="box web">
+<h2>1 Web, Browser, Begriffe</h2>
+<ul>
+<li><b>Internet</b> = weltweites Netzwerk. <b>WWW</b> = ein Dienst darauf (Webseiten über HTTP), 1989 von <b>Tim Berners-Lee</b> am <b>CERN</b> erfunden, erste Website 1991.</li>
+<li><b>HTML</b> = HyperText Markup Language: Auszeichnungssprache für <b>Struktur/Inhalt</b> (keine Programmiersprache). <b>CSS</b> = Cascading Style Sheets: <b>Darstellung</b>, trennt Design vom Inhalt. JavaScript = Verhalten (nicht M101).</li>
+<li><b>Browser</b> (Chrome, Edge, Firefox, Safari): fordert Dateien beim <b>Webserver</b> an (HTTP/<b>HTTPS</b> = verschlüsselt), interpretiert HTML/CSS und stellt die Seite dar (rendern). Client-Server-Prinzip.</li>
+<li><b>URL</b>: <code>https://www.zli.ch/kurse/index.html</code> = Protokoll · Subdomain · Domain · Top-Level-Domain (.ch) · Pfad · Datei. <b>DNS</b> übersetzt Domain → IP-Adresse.</li>
+<li><b>Webstandards</b>: von <b>W3C</b> und <b>WHATWG</b>; Ziel: gleiche Darstellung in allen Browsern, Barrierefreiheit, Benutzerfreundlichkeit.</li>
+<li><b>Endgeräte</b> (Desktop/Tablet/Smartphone) unterscheiden sich in Auflösung, Bildschirmgrösse, Bedienung (Maus/Touch) und Bandbreite → kleine Bilder, <code>viewport</code>-Meta, flexible Layouts.</li>
+</ul>
+</div>
+
+<div class="box web">
+<h2>2 Projektablauf (Handlungsziele)</h2>
+<ol style="padding-left:3mm">
+<li><b>Analyse</b>: Ziel, Zielgruppe, Inhalte, Funktionen der Vorgabe.</li>
+<li><b>Sitemap</b> = Struktur: welche Seiten, welche Inhalte wo, Hierarchie (M101: max. 3 Ebenen). <b>Mockup/Wireframe</b> = Layoutskizze inkl. Navigation (z. B. Adobe XD, Figma).</li>
+<li><b>Umsetzen</b> mit HTML + CSS.</li>
+<li><b>Testen</b> gegen die Vorgabe (Validator, Testprotokoll, Browser/Geräte).</li>
+<li><b>Veröffentlichen</b> auf Webserver (FTP).</li>
+</ol>
+</div>
+
+<div class="box html">
+<h2>3 HTML-Grundgerüst</h2>
+<pre>&lt;!DOCTYPE html&gt;           ← HTML5
+&lt;html lang="de"&gt;
+&lt;head&gt;                   ← unsichtbar
+  &lt;meta charset="utf-8"&gt; ← Umlaute!
+  &lt;meta name="viewport" content=
+   "width=device-width, initial-scale=1.0"&gt;
+  &lt;meta name="description" content="..."&gt;
+  &lt;meta name="author" content="..."&gt;
+  &lt;title&gt;Titel im Tab&lt;/title&gt;
+  &lt;link rel="stylesheet" href="css/style.css"&gt;
+  &lt;link rel="icon" href="favicon.png"&gt;
+&lt;/head&gt;
+&lt;body&gt; ... sichtbarer Inhalt ... &lt;/body&gt;
+&lt;/html&gt;</pre>
+<p><b>Aufbau Tag</b>: <code>&lt;a href="x.html"&gt;Text&lt;/a&gt;</code> = Start-Tag · Attribut<b>name</b>="<b>wert</b>" · Inhalt · End-Tag. Element = Start-Tag + Inhalt + End-Tag.
+<b>Leere Elemente</b> ohne End-Tag: <code>img br hr meta link input</code> (<code>&lt;br&gt;</code> oder <code>&lt;br /&gt;</code>).
+Verschachtelung: zuletzt geöffnet = zuerst geschlossen. Kommentar: <code>&lt;!-- ... --&gt;</code>.</p>
+<p><b>Sonderzeichen</b>: <code>&amp;amp;</code> &amp; · <code>&amp;lt; &amp;gt;</code> &lt; &gt; · <code>&amp;nbsp;</code> festes Leerzeichen · <code>&amp;copy;</code> © · <code>&amp;mdash;</code> — · <code>&amp;quot;</code> "</p>
+</div>
+
+<div class="box html">
+<h2>4 Semantische Elemente (HTML5)</h2>
+<table>
+<tr><td><code>header</code></td><td>Kopf: Logo, Titel, Navigation</td></tr>
+<tr><td><code>nav</code></td><td>Navigationslinks (mit <code>ul</code>/<code>li</code>)</td></tr>
+<tr><td><code>main</code></td><td>Hauptinhalt, <b>nur 1× pro Seite</b></td></tr>
+<tr><td><code>section</code></td><td>thematischer Abschnitt (mit Überschrift)</td></tr>
+<tr><td><code>article</code></td><td>eigenständiger Inhalt (Beitrag, Karte)</td></tr>
+<tr><td><code>aside</code></td><td>Randbemerkung, Seitenleiste</td></tr>
+<tr><td><code>footer</code></td><td>Fuss: Copyright, Impressum, Kontakt</td></tr>
+<tr><td><code>figure</code>/<code>figcaption</code></td><td>Bild mit Bildunterschrift</td></tr>
+<tr><td><code>div</code> / <code>span</code></td><td>ohne Bedeutung, nur für CSS (block / inline)</td></tr>
+</table>
+<p><b>Warum Semantik?</b> Suchmaschinen (SEO) gewichten Inhalte nach Tags (<code>title</code>, <code>h1</code> → Keywords), <b>Screenreader</b> lesen Sehbehinderten den Code vor (Barrierefreiheit), Code lesbarer. Ein <code>h1</code> pro Seite, Überschriften nicht überspringen.</p>
+</div>
+
+<div class="box html">
+<h2>5 Wichtige Tags &amp; Attribute</h2>
+<table>
+<tr><td><code>h1</code>–<code>h6</code></td><td>Überschriften (Hierarchie)</td></tr>
+<tr><td><code>p</code> · <code>br</code> · <code>hr</code></td><td>Absatz · Zeilenumbruch · Trennlinie</td></tr>
+<tr><td><code>strong</code> / <code>em</code></td><td>wichtig (fett) / betont (kursiv); <code>b</code>/<code>i</code> nur optisch</td></tr>
+<tr><td><code>sup</code> <code>sub</code></td><td>hoch- / tiefgestellt (Fussnote*, H₂O)</td></tr>
+<tr><td><code>blockquote</code> · <code>q</code></td><td>Zitat als Block (<code>cite="URL"</code>) · inline</td></tr>
+<tr><td><code>a href</code></td><td>Link, <code>target="_blank"</code> = neues Tab</td></tr>
+<tr><td><code>img src alt</code></td><td>Bild + Alternativtext (Pflicht)</td></tr>
+<tr><td><code>id="x"</code></td><td>eindeutig, 1× pro Seite (CSS <code>#x</code>, Anker)</td></tr>
+<tr><td><code>class="x"</code></td><td>mehrfach verwendbar (CSS <code>.x</code>)</td></tr>
+<tr><td><code>style="..."</code></td><td>Inline-CSS (vermeiden)</td></tr>
+<tr><td><code>title="..."</code></td><td>Tooltip beim Hover</td></tr>
+</table>
+<p><b>Block</b> (neue Zeile, volle Breite): <code>h1–h6 p div ul ol li table form header main footer section nav</code>.
+<b>Inline</b> (nur so breit wie nötig, kein Umbruch): <code>span a img em strong br</code>.</p>
+</div>
+
+<div class="box html">
+<h2>6 Links &amp; Pfade</h2>
+<table>
+<tr><td><code>kontakt.html</code> / <code>./kontakt.html</code></td><td>gleicher Ordner</td></tr>
+<tr><td><code>seiten/team.html</code></td><td>Unterordner</td></tr>
+<tr><td><code>../index.html</code></td><td>ein Ordner höher</td></tr>
+<tr><td><code>/kontakt.html</code></td><td>ab DocumentRoot (Server-Wurzel)</td></tr>
+<tr><td><code>#team</code></td><td>Anker → Element mit <code>id="team"</code></td></tr>
+<tr><td><code>seite.html#team</code></td><td>Anker auf anderer Seite</td></tr>
+<tr><td><code>https://www.zli.ch/x.html</code></td><td><b>absolut</b> (mit Protokoll!)</td></tr>
+<tr><td><code>www.zli.ch/x.html</code></td><td><b>nicht</b> absolut (https fehlt → wird relativ)</td></tr>
+<tr><td><code>C:\User\...\x.html</code></td><td>absolut auf Festplatte → <b>nie</b>! online kaputt</td></tr>
+<tr><td><code>mailto:a@b.ch</code> · <code>tel:+41...</code></td><td>E-Mail · Telefon</td></tr>
+</table>
+<p>Relativ = funktioniert nach Hosting-Wechsel weiter (gleiche Ordnerstruktur). Extern = absolut.</p>
+</div>
+
+<div class="box html">
+<h2>7 Datei- &amp; Ordnernamen</h2>
+<ul>
+<li><b>alles klein</b> (Windows: <code>Bild.jpg</code> = <code>bild.jpg</code>; Linux-Webserver: zwei verschiedene Dateien!)</li>
+<li><b>keine Leerzeichen, Umlaute, Sonderzeichen</b> → <code>-</code> oder <code>_</code>: <code>ueber-uns.html</code></li>
+<li>Startseite heisst <b><code>index.html</code></b>; mit Ordnern arbeiten (<code>css/</code>, <code>bilder/</code>); Sicherheitskopien.</li>
+<li>Falsch: <code>Seite 2 (Über uns).html</code>, <code>erste Seite Style.css</code>, <code>Favicon.png</code></li>
+</ul>
+</div>
+
+<div class="box html">
+<h2>8 Listen &amp; Tabellen</h2>
+<pre>&lt;ul&gt;&lt;li&gt;Punkt&lt;/li&gt;&lt;/ul&gt;        ungeordnet
+&lt;ol start="5"&gt;&lt;li&gt;..&lt;/li&gt;&lt;/ol&gt;  nummeriert
+&lt;dl&gt;&lt;dt&gt;Begriff&lt;/dt&gt;&lt;dd&gt;Erklärung&lt;/dd&gt;&lt;/dl&gt;</pre>
+<p>Verschachtelt: neue <code>ul</code> <b>innerhalb</b> eines <code>li</code>. Navigation immer <code>nav</code> + <code>ul</code>.</p>
+<pre>&lt;table&gt;
+ &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Tag&lt;/th&gt;&lt;th&gt;Zeit&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+ &lt;tbody&gt;&lt;tr&gt;&lt;td colspan="2"&gt;zu&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;
+&lt;/table&gt;</pre>
+<p><code>tr</code> Zeile · <code>th</code> Kopfzelle · <code>td</code> Datenzelle · <code>thead/tbody/tfoot</code> Struktur · <code>caption</code> Titel.
+<b>colspan</b> = Spalten verbinden (horizontal), <b>rowspan</b> = Zeilen verbinden (vertikal). Zellen pro Zeile (inkl. colspan) = Spaltenzahl.
+CSS: <code>border-collapse: collapse</code> = einfache Rahmen.</p>
+</div>
+
+<div class="box med">
+<h2>9 Bildformate</h2>
+<table style="font-size:5.9pt">
+<tr><th></th><th>JPG</th><th>PNG</th><th>GIF</th><th>SVG</th></tr>
+<tr><td>Art</td><td>Raster</td><td>Raster</td><td>Raster</td><td><b>Vektor</b></td></tr>
+<tr><td>Kompr.</td><td>hoch, <b>verlust­behaftet</b></td><td>verlust<b>frei</b></td><td>gering</td><td>keine</td></tr>
+<tr><td>Farben</td><td>16,7 Mio.</td><td>sehr viele</td><td><b>max. 256</b></td><td>16,7 Mio.</td></tr>
+<tr><td>Transp.</td><td>nein</td><td>ja (Alpha)</td><td>ja (1 Farbe)</td><td>ja</td></tr>
+<tr><td>Anim.</td><td>nein</td><td>ja (.apng)</td><td>ja</td><td>ja</td></tr>
+<tr><td>Grösse</td><td>sehr klein</td><td>klein–gross</td><td>gross</td><td>individuell</td></tr>
+<tr><td>Ideal</td><td><b>Fotos</b></td><td>Logos, Icons, Transparenz</td><td>Animation, Clip-Art</td><td>Logos, Icons, Diagramme</td></tr>
+</table>
+<p><b>Raster</b> (Pixel) wird beim Vergrössern unscharf; <b>Vektor</b> (Formen/Pfade) verlustfrei skalierbar. BMP: nicht verwenden (riesig). WebP: modernes Webformat (klein, Transparenz).
+<b>Bilder fürs Web</b>: auf Anzeigegrösse verkleinern, komprimieren, sprechender Dateiname, immer <code>alt</code>.
+<b>Favicon</b>: quadratisch, 32×32 px, <code>&lt;link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png"&gt;</code>.
+<b>PDF</b> webgerecht: komprimiert, Link mit Typ+Grösse: „preise.pdf – 56 kB“.</p>
+</div>
+
+<div class="box med">
+<h2>10 Video &amp; Audio</h2>
+<pre>&lt;video src="film.mp4" controls poster="v.jpg"&gt;
+  &lt;source src="film.webm" type="video/webm"&gt;
+&lt;/video&gt;
+&lt;audio controls&gt;
+  &lt;source src="ton.mp3" type="audio/mpeg"&gt;
+  &lt;source src="ton.ogg" type="audio/ogg"&gt;
+&lt;/audio&gt;</pre>
+<p>Attribute: <code>controls</code> Player sichtbar · <code>autoplay</code> automatisch (browserabhängig) · <code>loop</code> Endlosschleife · <code>muted</code> stumm · <code>poster</code> Vorschaubild. <code>source</code> = Alternativformate.
+<b>Video</b>: <b>MP4</b> Standard, gute Kompression, höchste Kompatibilität · <b>WebM</b> offen (Google) · <b>OGV</b> offen, wenig verbreitet.
+<b>Audio</b>: <b>MP3</b> verlustbehaftet, klein, verbreitet · <b>AAC</b> besser als MP3, Apple-Standard · <b>OGG</b> offen · <b>WAV</b> unkomprimiert, sehr gross.</p>
+</div>
+
+<div class="box law">
+<h2>11 Urheberrecht, Bildrechte, Datenschutz</h2>
+<ul>
+<li>Für jede Verwendung eines fremden Werks braucht es eine <b>Erlaubnis (Lizenz)</b> des Rechteinhabers. Immer!</li>
+<li>Geschützt: Werke = <b>geistige Schöpfung mit individuellem Charakter</b> (Texte, Musik, Bilder, Fotos, Filme, Software, Design). <b>Nicht</b> geschützt: Ideen, Konzepte, Methoden, reines Handwerk.</li>
+<li>Schutz entsteht <b>automatisch bei Erschaffung</b>, keine Anmeldung/Register. <b>©</b> hat in der CH keine rechtliche Wirkung, nur Hinweis (empfohlen).</li>
+<li>Dauer: <b>70 Jahre nach Tod</b> des Urhebers, Software <b>50 J.</b>; verwandte Schutzrechte (Interpreten, CD) 50 J. Gesetz: URG; zuständig: <b>IGE</b>.</li>
+<li><b>Privatgebrauch</b> erlaubt (inkl. Download/Streaming), <b>Hochladen/Veröffentlichen nicht</b> (auch ohne Gewinn). <b>Zitat</b> erlaubt: nicht länger als nötig, als Zitat kennzeichnen, Quelle nennen.</li>
+<li><b>Recht am eigenen Bild</b>: abgebildete Person entscheidet über Aufnahme und Veröffentlichung → Einwilligung einholen (Ausnahme: überwiegendes öffentliches Interesse, z. B. Menge an Veranstaltung). Im Zweifel fragen.</li>
+<li><b>Creative Commons</b>: BY = Namensnennung · NC = nicht kommerziell · ND = keine Bearbeitung · SA = Weitergabe unter gleichen Bedingungen · CC0 = frei. Gratis-Bildportale (Unsplash, Pixabay, Pexels): Bedingungen lesen, Urheber + Link nennen. Stock (iStock, Shutterstock): kostenpflichtige Lizenz.</li>
+<li><b>KI-Bilder</b>: ohne menschliche Schöpfung meist kein urheberrechtlicher Schutz; Nutzungsbedingungen des Tools beachten, keine geschützten Werke/echten Personen nachbilden.</li>
+<li><b>Datenschutz</b> (DSG): Personendaten nur nötig &amp; zweckgebunden; Website mit Impressum und Datenschutzerklärung.</li>
+</ul>
+</div>
+
+<div class="box web">
+<h2>12 Testen &amp; Barrierefreiheit</h2>
+<p><b>W3C Validator</b> prüft Syntax gegen den Standard: HTML <code>validator.w3.org</code>, CSS <code>jigsaw.w3.org/css-validator</code>.</p>
+<p><b>Testprotokoll</b> (was, wie, Resultat, Massnahme). <i>Technisch</i>: Syntax HTML/CSS, DOCTYPE, Meta-Angaben (Autor, Beschreibung), nur von allen Browsern unterstützte Technologien, Bilder (Auflösung, Grösse, Format), Aktualität, Namenskonventionen. <i>Gestaltung</i>: einheitliche Schrift, Ausrichtung, Lesbarkeit/Kontrast, Bedienelemente (Links, Buttons), Layout/CI, HTML-fremde Inhalte (Typ+Grösse). In mehreren Browsern + Geräten testen (F12 Gerätemodus), alle Links klicken.</p>
+<p><b>Barrierefreiheit</b>: Textalternativen (<code>alt</code>), Kontraste &amp; Farben, Skalierbarkeit (Zoom), Linearisierbarkeit (Reihenfolge im Code sinnvoll), Tastaturbedienung/Fokus, ARIA, Verständlichkeit &amp; Navigation, strukturierte Inhalte (Semantik). Tools: Silktide-Extension, Accessibility-Checkliste (a11y.digitaldialog.swiss).</p>
+</div>
+
+<div class="box web">
+<h2>13 Veröffentlichen</h2>
+<ul>
+<li><b>Webhosting</b> = Speicherplatz auf einem Webserver (+ Domain), z. B. Hostpoint.</li>
+<li><b>FTP</b> (File Transfer Protocol) überträgt Dateien zwischen Rechnern, unabhängig von Betriebssystem; auch Ordner anzeigen, umbenennen, löschen, Zugriffsrechte setzen.</li>
+<li>Zugang: Server/Host, Benutzername, Passwort, Port (FTP 21). <b>Sicher</b>: <b>SFTP</b> (Port 22) / FTPS – normales FTP ist unverschlüsselt.</li>
+<li>Werkzeuge: FTP-Client (<b>FileZilla</b>, <b>Cyberduck</b>), Browser-Add-on (fireFTP), <b>WebFTP</b> des Anbieters (umständlicher).</li>
+<li>Vorher: <code>index.html</code> im Hauptordner, relative Pfade, Dateinamen klein, Bilder optimiert, validiert. Hochladen in Web-Ordner (z. B. <code>public_html</code>/<code>httpdocs</code>), danach <b>online testen</b>.</li>
+</ul>
+</div>
+
+</div>
+</section>
+
+<!-- ====================== SEITE 2 ====================== -->
+<section class="page">
+<div class="top">
+    <h1>M101 Spickzettel 2/2 <span class="n" style="font-size:7pt">CSS</span></h1>
+    <div class="idx">
+        <span style="background:#1d7a3a">14 Einbindung</span> <span style="background:#1d7a3a">15 Selektoren</span> <span style="background:#1d7a3a">16 Spezifität</span> <span style="background:#1d7a3a">17 Box-Modell</span> <span style="background:#1d7a3a">18 Display/Position</span> <span style="background:#1d7a3a">19 Text/Farben</span> <span style="background:#1d7a3a">20 Flex</span> <span style="background:#1d7a3a">21 Grid</span> <span style="background:#c0172b">22 Fehler</span> <span style="background:#6a3d9a">23 Fragen</span>
+    </div>
+</div>
+<div class="cols">
+
+<div class="box css">
+<h2>14 CSS-Aufbau &amp; Einbindung</h2>
+<pre>h1, h2 {            ← Selektor
+  color: #2a1959;    ← Deklaration
+  font-size: 1.5em;     (Eigenschaft: Wert;)
+}  /* Kommentar */</pre>
+<table>
+<tr><th>Art</th><th>Code</th><th>+ / –</th></tr>
+<tr><td>Inline</td><td><code>&lt;p style="color:red"&gt;</code></td><td>+ schnell, einzeln · – unübersichtlich, keine Trennung, schwer wartbar</td></tr>
+<tr><td>Intern</td><td><code>&lt;style&gt;...&lt;/style&gt;</code> im head</td><td>+ zentral · – gilt nur für 1 Seite</td></tr>
+<tr><td><b>Extern</b></td><td><code>&lt;link rel="stylesheet" href="style.css"&gt;</code></td><td>+ Trennung, 1 Datei für alle Seiten, wartbar · – 1 Datei mehr laden</td></tr>
+<tr><td>@import</td><td><code>@import url("x.css");</code></td><td>+ CSS aufteilen · – lädt langsamer</td></tr>
+</table>
+<p><b>Kaskade</b> („Cascading“): bei Konflikt entscheidet 1. <code>!important</code>, 2. Spezifität, 3. Reihenfolge (später gewinnt). Inline &gt; intern/extern. <b>Vererbung</b>: Text-Eigenschaften (<code>color, font-*, line-height</code>) erben Kinder; <code>margin, padding, border, width, background</code> nicht.</p>
+</div>
+
+<div class="box css">
+<h2>15 Selektoren</h2>
+<table>
+<tr><td><code>*</code></td><td>alle Elemente</td></tr>
+<tr><td><code>p</code></td><td>Element(typ)</td></tr>
+<tr><td><code>.klein</code></td><td>Klasse <code>class="klein"</code></td></tr>
+<tr><td><code>#intro</code></td><td>ID <code>id="intro"</code></td></tr>
+<tr><td><code>h2, p</code></td><td>Gruppe: h2 <b>und</b> p</td></tr>
+<tr><td><code>nav a</code></td><td>Nachfahre: alle a irgendwo in nav</td></tr>
+<tr><td><code>ul &gt; li</code></td><td>direktes Kind</td></tr>
+<tr><td><code>h2 + p</code></td><td>p direkt nach h2</td></tr>
+<tr><td><code>a.aktiv</code></td><td>a mit Klasse aktiv (ohne Leerzeichen!)</td></tr>
+<tr><td><code>[type="email"]</code></td><td>Attribut</td></tr>
+<tr><td><code>a:link :visited :hover :active</code></td><td>unbesucht · besucht · Maus drüber · beim Klick (Reihenfolge <b>LVHA</b>)</td></tr>
+<tr><td><code>:focus</code></td><td>per Tastatur/Klick ausgewählt</td></tr>
+<tr><td><code>li:first-child</code> <code>:last-child</code></td><td>erstes/letztes Kind</td></tr>
+<tr><td><code>tr:nth-child(even)</code></td><td>jedes 2. (odd, 3, 2n+1)</td></tr>
+<tr><td><code>p::first-line</code> <code>::before</code></td><td>Pseudo-Element</td></tr>
+</table>
+</div>
+
+<div class="box css">
+<h2>16 Spezifität (wer gewinnt?)</h2>
+<table>
+<tr><th>Selektor</th><th>Wert</th></tr>
+<tr><td><code>style="..."</code> (inline)</td><td>1-0-0-0</td></tr>
+<tr><td><code>#id</code></td><td>0-1-0-0</td></tr>
+<tr><td><code>.klasse</code>, <code>:hover</code>, <code>[attr]</code></td><td>0-0-1-0</td></tr>
+<tr><td><code>p</code>, <code>::before</code></td><td>0-0-0-1</td></tr>
+<tr><td><code>*</code></td><td>0</td></tr>
+</table>
+<p>Zusammenzählen, von links vergleichen: <code>#nav a</code> (0-1-0-1) &gt; <code>.menu a</code> (0-0-1-1) &gt; <code>a</code>. Gleich → die <b>weiter unten</b> stehende Regel gewinnt. <code>!important</code> schlägt alles (vermeiden). Im Browser F12 → Styles: durchgestrichen = überschrieben.</p>
+</div>
+
+<div class="box css">
+<h2>17 Box-Modell</h2>
+<div style="border:1pt dashed #999;padding:0.8mm;text-align:center;margin:0.5mm 0">margin (aussen, transparent)
+<div style="border:1.5pt solid #1d7a3a;padding:0.8mm">border (Rahmen)
+<div style="background:#dfeee3;padding:0.8mm">padding (innen, mit Hintergrundfarbe)
+<div style="background:#fff;border:0.5pt solid #bbb;padding:0.5mm">content (width × height)</div></div></div></div>
+<p><b>Breite</b> (Standard <code>content-box</code>) = width + padding links/rechts + border links/rechts (+ margin). Mit <code>box-sizing: border-box</code> sind padding + border <b>in</b> width enthalten.
+Bsp: width 200 + padding 2×10 + border 2×1 = <b>222 px</b> (border-box: 200).</p>
+<p><b>Kurzschreibweise</b>: <code>margin: 10px</code> alle · <code>10px 20px</code> oben/unten · links/rechts · <code>5px 10px 15px</code> oben · l/r · unten · <code>1px 2px 3px 4px</code> oben rechts unten links (Uhrzeiger). <code>border: 1px solid red</code> (Breite Stil Farbe; Stil: solid dashed dotted double none). <code>border-radius: 5px</code> runde Ecken.
+<code>margin: 0 auto</code> + width = Block zentrieren. Vertikale margins fallen zusammen (der grössere zählt). Browser-Standards: body 8px margin, ul padding-left.</p>
+</div>
+
+<div class="box css">
+<h2>18 display, position, float</h2>
+<table>
+<tr><td><code>block</code></td><td>neue Zeile, volle Breite, width/height wirken</td></tr>
+<tr><td><code>inline</code></td><td>im Textfluss, nur so breit wie Inhalt, <b>kein</b> width/height/margin oben-unten</td></tr>
+<tr><td><code>inline-block</code></td><td>im Fluss nebeneinander, aber width/height möglich (z. B. Nav-<code>li</code>)</td></tr>
+<tr><td><code>none</code></td><td>unsichtbar, kein Platz (<code>visibility:hidden</code>: unsichtbar, Platz bleibt)</td></tr>
+<tr><td><code>flex</code> / <code>grid</code></td><td>Layout-Container für die Kinder</td></tr>
+</table>
+<table>
+<tr><td><code>static</code></td><td>Standard, kein top/left</td></tr>
+<tr><td><code>relative</code></td><td>verschoben relativ zur normalen Position, Platz bleibt; Bezugspunkt für absolute Kinder</td></tr>
+<tr><td><code>absolute</code></td><td>aus dem Fluss, relativ zum nächsten positionierten Vorfahren</td></tr>
+<tr><td><code>fixed</code></td><td>relativ zum Viewport (Fenster), bleibt beim Scrollen</td></tr>
+<tr><td><code>sticky</code></td><td>normal, „klebt“ ab Scroll-Position (<code>top:0</code>)</td></tr>
+</table>
+<p>Mit <code>top right bottom left</code>; <code>z-index</code> = Stapelreihenfolge (höher = vorne, nur positionierte). <code>float: right</code> → Element rechts, Text fliesst herum; <code>clear: both</code> beendet. <code>overflow: hidden/auto</code> = Überlauf abschneiden/scrollen.</p>
+</div>
+
+<div class="box css">
+<h2>19 Einheiten, Farben, Text, Hintergrund</h2>
+<p><b>Einheiten</b>: <code>px</code> absolut · <code>%</code> vom Eltern-Element · <code>em</code> × Schriftgrösse des Elternelements (1.5em = 1,5-fach) · <code>rem</code> × Schriftgrösse von <code>html</code> (meist 16px) · <code>vw/vh</code> % der Fensterbreite/-höhe · <code>fr</code> Anteil (Grid). Zahl und Einheit <b>ohne Leerzeichen</b>; bei 0 keine Einheit nötig.</p>
+<p><b>Farben</b>: Name <code>red</code> · Hex <code>#rrggbb</code> (<code>#ff0000</code>), kurz <code>#f00</code>, <code>#030</code> = <code>#003300</code> · <code>rgb(255,0,0)</code> · <code>rgba(0,0,0,0.5)</code> (a = Deckkraft 0–1) · <code>hsl(0,100%,50%)</code>. <code>color</code> = Schrift, <code>background-color</code> = Hintergrund.</p>
+<table>
+<tr><td><code>font-family</code></td><td><code>Verdana, Arial, sans-serif</code> (immer Ersatz: serif, sans-serif, monospace)</td></tr>
+<tr><td><code>font-size</code></td><td><code>16px</code>, <code>1.2em</code>, <code>small</code></td></tr>
+<tr><td><code>font-weight</code></td><td><code>bold</code>, <code>normal</code>, 100–900</td></tr>
+<tr><td><code>font-style</code></td><td><code>italic</code></td></tr>
+<tr><td><code>font-variant</code></td><td><code>small-caps</code> = Kapitälchen</td></tr>
+<tr><td><code>text-transform</code></td><td><code>uppercase</code> / <code>lowercase</code> / <code>capitalize</code></td></tr>
+<tr><td><code>text-decoration</code></td><td><code>none</code> (Link ohne Unterstrich), <code>underline</code></td></tr>
+<tr><td><code>text-align</code></td><td><code>left center right justify</code></td></tr>
+<tr><td><code>line-height</code> · <code>letter-spacing</code></td><td>Zeilenhöhe <code>1.5</code> · Zeichenabstand</td></tr>
+<tr><td><code>list-style</code></td><td><code>none</code>, <code>square</code>, <code>decimal</code></td></tr>
+</table>
+<p><b>Hintergrundbild</b>: <code>background-image: url("../bilder/x.jpg")</code> (Pfad relativ zur <b>CSS-Datei</b>) · <code>background-repeat: repeat | repeat-x | repeat-y | no-repeat</code> · <code>background-position: right 100px | center | top left</code> · <code>background-size: cover</code> · <code>background-attachment: fixed</code> (bleibt beim Scrollen).</p>
+<p><b>Gestaltung</b>: max. 2–3 Schriften, wenige einheitliche Farben (Corporate Identity), genug <b>Kontrast</b> (dunkel auf hell), serifenlos am Bildschirm gut lesbar, Weissraum.</p>
+</div>
+
+<div class="box css">
+<h2>20 Flexbox (1 Richtung)</h2>
+<p>Auf den <b>Eltern-Container</b>: <code>display: flex</code> → direkte Kinder nebeneinander. Hauptachse = <code>flex-direction</code>, Querachse senkrecht dazu.</p>
+<table>
+<tr><th colspan="2">Container</th></tr>
+<tr><td><code>flex-direction</code></td><td><code>row</code> (Std.) | <code>column</code> | <code>row-reverse</code></td></tr>
+<tr><td><code>justify-content</code></td><td>Hauptachse: <code>flex-start center flex-end space-between space-around space-evenly</code></td></tr>
+<tr><td><code>align-items</code></td><td>Querachse: <code>stretch</code> (Std.) <code>center flex-start flex-end</code></td></tr>
+<tr><td><code>flex-wrap</code></td><td><code>wrap</code> = Umbruch erlauben</td></tr>
+<tr><td><code>gap</code></td><td>Abstand zwischen Items</td></tr>
+<tr><th colspan="2">Item (Kind)</th></tr>
+<tr><td><code>flex: 1</code></td><td>wächst, teilt Platz gleich (<code>flex: 2</code> = doppelt)</td></tr>
+<tr><td><code>flex: 0 0 300px</code></td><td>grow shrink basis: fix 300px</td></tr>
+<tr><td><code>order</code> · <code>align-self</code></td><td>Reihenfolge · eigene Querausrichtung</td></tr>
+</table>
+<pre>nav ul { display:flex; gap:20px;
+         list-style:none; }
+/* Logo links, Nav rechts */
+header { display:flex; align-items:center;
+         justify-content:space-between; }
+/* Inhalt in der Box mittig */
+.box { display:flex; justify-content:center;
+       align-items:center; }</pre>
+</div>
+
+<div class="box css">
+<h2>21 Grid (2 Richtungen)</h2>
+<pre>#galerie {
+  display: grid;
+  /* 4 gleich breite Spalten */
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 200px auto;
+  grid-auto-rows: 200px; /* weitere */
+  gap: 1rem;             /* Abstand */
+}
+.gross { grid-column: span 2;
+         grid-row: span 2; }
+/* von Linie 1 bis 3 */
+.kopf { grid-column: 1 / 3; }
+/* ganze Breite */
+.x { grid-column: 1 / -1; }</pre>
+<p><code>1fr 2fr</code> = Anteile; <code>200px 1fr</code> = fix + Rest. Linien zählen ab 1. <code>grid-template-areas: "kopf kopf" "nav main";</code> + <code>grid-area: kopf;</code>. Bild füllt Zelle: <code>width:100%; height:100%; object-fit:cover;</code>.
+<b>Flex vs. Grid</b>: Flex = eine Reihe/Spalte (Nav, Karten); Grid = Zeilen <b>und</b> Spalten (Galerie, Seitenraster).</p>
+</div>
+
+<div class="box err">
+<h2>22 Häufige Fehler (vgl. Übung 3.3)</h2>
+<table>
+<tr><th>Symptom</th><th>Ursache</th></tr>
+<tr><td>gar kein Design</td><td><code>link</code>-Pfad/Name falsch, <code>rel="stylesheet"</code> fehlt</td></tr>
+<tr><td>Bild fehlt</td><td>Pfad/Endung/Gross-Klein falsch, <code>"</code> fehlt</td></tr>
+<tr><td>Text verschwindet</td><td><code>&lt;h2Titel</code> (<code>&gt;</code> fehlt), <code>&lt;!--</code> nicht zu</td></tr>
+<tr><td>ab da alles kursiv/fett</td><td><code>em/strong/a</code> nicht geschlossen</td></tr>
+<tr><td>ä ö ü kaputt</td><td><code>meta charset="utf-8"</code> fehlt</td></tr>
+<tr><td>Anker springt nicht</td><td><code>#kontakt</code> ≠ <code>id="Kontakt"</code></td></tr>
+<tr><td>Link nur lokal ok</td><td><code>C:\...</code> statt relativ</td></tr>
+<tr><td>Tabelle verschoben</td><td>colspan/Zellenzahl falsch</td></tr>
+<tr><td>1 Eigenschaft wirkungslos</td><td>Tippfehler <code>colour widht</code>, <code>10 px</code>, falscher Wert <code>display:flexbox</code></td></tr>
+<tr><td>2 Zeilen wirkungslos</td><td><code>;</code> fehlt</td></tr>
+<tr><td>ab da wirkt nichts</td><td><code>}</code> fehlt</td></tr>
+<tr><td>Regel greift nicht</td><td><code>.x</code> vs <code>#x</code> verwechselt; Spezifität</td></tr>
+<tr><td>Flex wirkt nicht</td><td>auf Kind statt Eltern gesetzt</td></tr>
+<tr><td>horiz. Scrollbalken</td><td>feste px-Breite, Bild ohne <code>max-width:100%</code></td></tr>
+</table>
+</div>
+
+<div class="box web">
+<h2>23 Typische Fragen – Kurzantwort</h2>
+<table>
+<tr><td><b>id vs. class</b></td><td>id eindeutig (1× pro Seite, <code>#</code>), class mehrfach (<code>.</code>)</td></tr>
+<tr><td><b>margin vs. padding</b></td><td>margin = Aussenabstand (ausserhalb Rahmen, transparent); padding = Innenabstand (innerhalb, hat Hintergrundfarbe)</td></tr>
+<tr><td><b>block vs. inline</b></td><td>block: neue Zeile, volle Breite; inline: im Textfluss, nur Inhaltsbreite</td></tr>
+<tr><td><b>relativ vs. absolut</b></td><td>relativ: ab aktueller Datei (<code>../</code>), bleibt bei Umzug gültig; absolut: komplette URL mit <code>https://</code></td></tr>
+<tr><td><b>JPG vs. PNG</b></td><td>JPG Fotos, verlustbehaftet, klein; PNG Grafiken, verlustfrei, Transparenz</td></tr>
+<tr><td><b>Raster vs. Vektor</b></td><td>Pixel, unscharf beim Vergrössern; Formen, beliebig skalierbar (SVG)</td></tr>
+<tr><td><b>Warum externes CSS?</b></td><td>Trennung Inhalt/Design, eine Datei für alle Seiten, einfach wartbar</td></tr>
+<tr><td><b>Warum <code>alt</code>?</b></td><td>Screenreader (Barrierefreiheit), Ersatz wenn Bild nicht lädt, SEO</td></tr>
+<tr><td><b>Flex vs. Grid</b></td><td>Flex eindimensional (Reihe od. Spalte), Grid zweidimensional</td></tr>
+<tr><td><b>FTP vs. SFTP</b></td><td>FTP unverschlüsselt (Port 21), SFTP verschlüsselt (Port 22)</td></tr>
+<tr><td><b>Validator wozu?</b></td><td>prüft Code gegen W3C-Standard → gleiche Darstellung in allen Browsern</td></tr>
+<tr><td><b>HTML vs. CSS</b></td><td>HTML = Struktur/Inhalt (Auszeichnungssprache), CSS = Aussehen</td></tr>
+</table>
+<p><b>Nur am Rand im Kurs:</b> Formular <code>&lt;form&gt;&lt;label for="n"&gt;Name&lt;/label&gt;&lt;input type="text" id="n" name="n"&gt;&lt;button&gt;Senden&lt;/button&gt;&lt;/form&gt;</code> (Typen: text, email, password, checkbox, radio, submit). Responsive: <code>viewport</code>-Meta + <code>@media (max-width: 700px) { ... }</code> = Regeln nur für schmale Bildschirme.</p>
+</div>
+
+</div>
+</section>
+
+</body>
+</html>

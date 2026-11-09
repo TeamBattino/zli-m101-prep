@@ -7,6 +7,7 @@ mit normalem HTML und CSS. Kein JavaScript, keine Tools nötig: nur Browser und 
 | Ordner/Datei | Was |
 |---|---|
 | [`AGENT-GUIDE.md`](AGENT-GUIDE.md) | **Das Wichtigste.** Ablauf in der Prüfung, Regeln, Fehlersuche, Code-Muster für alle typischen Aufgaben, Schlusskontrolle. Auch für die KI gedacht. |
+| [`cheatsheet/cheatsheet.pdf`](cheatsheet/cheatsheet.pdf) | **Spickzettel für die Theorie-LB**: 1 A4-Blatt beidseitig (2 Seiten), alle Theorie aus dem Kurs. Doppelseitig, 100 % / „Tatsächliche Grösse“ drucken. Quelle: `cheatsheet.html` |
 | `01-bistro-fehler/` | Übung 1: HTML/CSS-Fehler finden (wie Kurs-Übung 3.3), Navigation, Tabelle |
 | `02-wanderverein-flexbox/` | Übung 2: Layout mit Flexbox und semantischen Tags (wie 5.1/5.2a), Spezifität |
 | `03-fotoclub-grid/` | Übung 3: Galerie mit CSS Grid und Hover (wie 5.3), Tabelle, Links, Dateinamen |
