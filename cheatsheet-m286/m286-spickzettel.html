@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>M286 LB1 Spickzettel (Vorlage)</title>
+<style>
+@page { size: A4; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #fff; }
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 9.2pt;
+    line-height: 1.2;
+    color: #111;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+.page {
+    width: 210mm;
+    height: 297mm;
+    padding: 6mm 7mm 5mm;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+.top { border-bottom: 1.2pt solid #111; padding-bottom: 1mm; margin-bottom: 2mm; }
+.top h1 { font-size: 12pt; }
+.warn { font-size: 8pt; color: #c0172b; font-weight: bold; }
+.cols { flex: 1; column-count: 2; column-gap: 5mm; column-fill: balance; min-height: 0; }
+.box { margin-bottom: 2mm; border-left: 1.5mm solid var(--c); padding-left: 1.6mm; }
+h2 {
+    font-size: 9pt; color: #fff; background: var(--c);
+    padding: 0.3mm 1.3mm; margin: 0 0 0.8mm -1.6mm; break-after: avoid;
+}
+p, li, tr, .f { break-inside: avoid; }
+p, li { margin-bottom: 0.6mm; }
+ul, ol { padding-left: 3.5mm; }
+table { border-collapse: collapse; width: 100%; margin: 0.4mm 0 0.8mm; }
+th, td { border: 0.4pt solid #aaa; padding: 0.3mm 0.8mm; text-align: left; vertical-align: top; }
+th { background: #eee; }
+.f { background: #fff6d6; border: 0.6pt solid #e0b400; padding: 0.8mm 1.2mm; margin: 0.6mm 0 1mm; font-weight: bold; }
+.hint { color: #666; font-size: 7.5pt; }
+.hw { --c: #1f5fa8; }
+.cmp { --c: #6a3d9a; }
+.eva { --c: #1d7a3a; }
+.if { --c: #c25e00; }
+.calc { --c: #c0172b; }
+.med { --c: #555; }
+</style>
+</head>
+<body>
+<section class="page">
+<div class="top">
+    <h1>M286 LB1 – Spickzettel (LU01–LU05)</h1>
+    <div class="warn">Vorlage zum Abschreiben – NICHT ausdrucken/mitnehmen (gedruckte werden eingezogen). Erlaubt: 1 A4-Seite, einseitig, von Hand. TI-30 mitnehmen.</div>
+</div>
+<div class="cols">
+
+<div class="box calc">
+<h2>Formeln (Taschenrechner)</h2>
+<div class="f">Note = 5 · Punkte / Max + 1</div>
+<div class="f">Zeit = Datenmenge / Geschwindigkeit<br>(gleiche Einheit! Mbit/s ÷ 8 = MB/s)</div>
+<div class="f">Bild = Breite · Höhe · Bit / 8 (Byte)<br>Audio = Hz · Bit · Kanäle · Sek. / 8<br>Text = Zeichen · 1 Byte</div>
+<div class="f">GB → GiB: · 10⁹ / 2³⁰ (500 GB ≈ 465 GiB)</div>
+<p>Pro h → Tag → Jahr → Leben: × Std./Tag × 365 × Jahre.<br>Sek. ÷ 60 = Min. ÷ 60 = h.</p>
+</div>
+
+<div class="box calc">
+<h2>Bit, Byte, Einheiten</h2>
+<p>Transistor = Schalter an/aus = 1 Bit. <b>8 Bit = 1 Byte</b> = 256 Werte. n Bit = 2<sup>n</sup> Zustände. 1 ASCII-Zeichen = 1 Byte.</p>
+<table>
+<tr><th>Basis 10 (Hersteller)</th><th>Basis 2 (Betriebssystem)</th></tr>
+<tr><td>KB = 10³ = 1000 B</td><td>KiB = 2¹⁰ = 1024 B</td></tr>
+<tr><td>MB = 10⁶</td><td>MiB = 2²⁰</td></tr>
+<tr><td>GB = 10⁹</td><td>GiB = 2³⁰</td></tr>
+<tr><td>TB = 10¹²</td><td>TiB = 2⁴⁰</td></tr>
+</table>
+<p>Bandbreite in <b>bit/s</b>, Dateien in <b>Byte</b>: 1 Gbit/s = 125 MB/s.</p>
+<p class="hint">Bsp.: 4.5 GB per USB 3.0 (300 MB/s) = 4500/300 = 15 s; per Bluetooth (0.25 MB/s) = 18'000 s = 5 h.</p>
+</div>
+
+<div class="box if">
+<h2>Schnittstellen</h2>
+<table>
+<tr><td><b>USB 2.0</b></td><td>480 Mbit/s</td></tr>
+<tr><td><b>USB 3.0</b></td><td>5 Gbit/s (3.1 Gen 2: 10, USB4: 40)</td></tr>
+<tr><td><b>Ethernet</b> (RJ-45)</td><td>100 Mbit/s – 1 Gbit/s, max. 100 m</td></tr>
+<tr><td><b>WLAN</b> Wi-Fi 5/6</td><td>3.5 / 9.6 Gbit/s, ~30 m innen</td></tr>
+<tr><td><b>Bluetooth</b> 5</td><td>2 Mbit/s, ~10 m, 2.4 GHz</td></tr>
+<tr><td><b>HDMI</b></td><td>digital Bild + Ton, 2.1 = 8K</td></tr>
+<tr><td><b>Glasfaser</b></td><td>sehr schnell, km weit</td></tr>
+</table>
+<p><b>USB</b>: Hot-Plug, abwärtskompatibel, Strom. A = PC, B = Gerät. <b>USB-C</b>: beidseitig, bis 100 W, auch Video.
+<b>HDMI</b> Typ A normal, C Mini, D Micro. LAN = stabil/sicher, WLAN = mobil/störanfällig.</p>
+<p><b>Fehlersuche</b>: Strom → Kabel/Stecker → richtiger Eingang → anderes Kabel/Port testen → Treiber.</p>
+</div>
+
+<div class="box med">
+<h2>Übertragungsmedien</h2>
+<table>
+<tr><th></th><th>Kupfer</th><th>Glasfaser</th><th>Funk</th></tr>
+<tr><td>Bandbreite</td><td>hoch</td><td>sehr hoch</td><td>tiefer</td></tr>
+<tr><td>Dämpfung</td><td>~100 m</td><td>km</td><td>Wände</td></tr>
+<tr><td>Störung</td><td>Strom-Felder</td><td>kaum (Biegen!)</td><td>andere Netze</td></tr>
+<tr><td>Kosten</td><td>günstig</td><td>teuer</td><td>kein Kabel</td></tr>
+</table>
+</div>
+
+<div class="box eva">
+<h2>EVA-Prinzip</h2>
+<p><b>E</b>ingabe → <b>V</b>erarbeitung → <b>A</b>usgabe.<br>
+E: Tastatur, Maus, Scanner, Mikrofon, Sensor · V: CPU, Betriebssystem, Software · A: Bildschirm, Drucker, Lautsprecher, Netzwerk.</p>
+<p><b>Bancomat</b>: E = Kartenleser, Tasten · V = Software prüft PIN/Konto · A = Geld, Bildschirm, Karte zurück, Beleg.<br>
+Beides (E+A): Touchscreen, Multifunktionsdrucker.</p>
+</div>
+
+<div class="box hw">
+<h2>Computer-Aufbau</h2>
+<p><b>CPU</b> rechnet (GHz, Kerne) · <b>Mainboard</b> verbindet alles · <b>RAM</b> Arbeitsspeicher, flüchtig · <b>SSD</b> schnell / <b>HDD</b> günstig, dauerhaft · <b>GPU</b> Grafik · <b>Netzteil</b> Strom.
+Hardware = Teile, Software = Programme. Peripherie = Geräte aussen (Maus, Drucker …).</p>
+</div>
+
+<div class="box cmp">
+<h2>Geräte vergleichen</h2>
+<p><b>objektiv</b> = messbar (GHz, GB, Auflösung, Preis) · <b>subjektiv</b> = Gefühl.</p>
+<p><b>Nutzwertanalyse</b>: Kriterien → Gewichtung (= 100 %) → Punkte pro Gerät → Punkte × Gewicht → Summe → höchste = Empfehlung (begründen).</p>
+<p>Büro: günstig · unterwegs: leicht, Akku · Multimedia: GPU, Display · Entwicklung: RAM, CPU, SSD.</p>
+</div>
+
+</div>
+</section>
+</body>
+</html>
