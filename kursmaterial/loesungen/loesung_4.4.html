@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Tabellen</title>
+        <meta charset="utf-8">
+        <style>
+            table,
+            table th,
+            table td {
+                border: solid black 1px;
+                border-collapse: collapse;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <h2>Eine einfache Tabelle anlegen</h2>
+
+        <table id="table1">
+            <tr>
+                <th>Album</th>
+                <th>Jahr</th>
+            </tr>
+            <tr>
+                <td>Rubber Soul</td>
+                <td>1965</td>
+            </tr>
+            <tr>
+                <td>Revolver</td>
+                <td>1966</td>
+            </tr>
+            <tr>
+                <td>Sgt. Pepper's</td>
+                <td>1967</td>
+            </tr>
+            <tr>
+                <td>Das weisse Album</td>
+                <td>1968</td>
+            </tr>
+            <tr>
+                <td>Abbey Road</td>
+                <td>1969</td>
+            </tr>
+        </table>
+
+        <h2>Verbunde Spalten</h2>
+
+        <table id="table2">
+            <tr>
+                <td colspan="3">Oh Brother Where are Thou?</td>
+            </tr>
+            <tr>
+                <td>Tatort</td>
+                <td>Versteckte Kamera</td>
+                <td>Is' was, Doc</td>
+            </tr>
+            <tr>
+                <td>Bonanza</td>
+                <td colspan="2">Rauchene Colts</td>
+            </tr>
+        </table>
+
+        <h2>Verbunde Zeilen</h2>
+
+        <table id="table3">
+            <tr>
+                <td>Äpfel</td>
+                <td rowspan="3">Orangen</td>
+                <td>Birnen</td>
+            </tr>
+            <tr>
+                <td>Bananen</td>
+                <td rowspan="2">Ananas</td>
+            </tr>
+            <tr>
+                <td>Lyches</td>
+            </tr>
+        </table>
+
+
+    </body>
+
+</html>

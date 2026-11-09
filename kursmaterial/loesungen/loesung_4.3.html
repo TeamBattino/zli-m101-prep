@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Mein horizontales Menü</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+
+            header {
+                background-color: #008b8b;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            nav li {
+                display: inline-block;
+                margin: 0 10px;
+                padding: 25px 0;
+                background-color: grey;
+            }
+
+            nav li:hover,
+            .active {
+                background-color: blueviolet;
+                transition: 0.3s;
+            }
+
+            nav li a {
+                font-size: 2em;
+                color: #222;
+                padding: 25px 50px;
+                text-decoration: none;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <header>
+            <nav>
+                <ul>
+                    <li class="active">
+                        <a href="menu.html" alt>
+                            Menu
+                        </a>
+                    </li>
+                    <li>
+                        <a href="produkte.html" alt>
+                            Produkte
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" alt>
+                            Neuigkeiten
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" alt>
+                            Kontakt
+                        </a>
+                    </li>
+                </ul>
+
+            </nav>
+
+        </header>
+
+        <main>
+            <h1>Menu</h1>
+        </main>
+        <footer>
+            Fusszeile
+        </footer>
+    </body>
+
+</html>

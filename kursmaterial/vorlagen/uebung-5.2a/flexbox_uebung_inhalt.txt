@@ -1,0 +1,41 @@
+Website-Titel
+Navigation:
+Home | Team | Profil | Kontakt
+
+---
+
+Flexbox Übung
+
+Willkommen auf unserer Website! Wir freuen uns, dass Sie den Weg zu uns gefunden haben.
+Diese Website ist ein Übungsprojekt, um die Flexbox-Technik zu lernen.
+Flexbox hilft dabei, Inhalte flexibel und einfach in Reihen oder Spalten anzuordnen.
+
+---
+
+Unsere Leistungen:
+- Webdesign
+- Programmierung
+- Beratung
+
+---
+
+Wissenswertes:
+Flexbox ist besonders nützlich, um moderne Layouts zu gestalten.
+Elemente können gleichmäßig verteilt, zentriert oder am Rand ausgerichtet werden –
+ganz ohne kompliziertes Positionieren.
+
+---
+
+Sidebar:
+Hier könnte eine Seitenleiste sein.
+
+---
+
+Zusätzlicher Bereich:
+Hier ist ein zusätzlicher Bereich, z. B. für Werbung oder Hinweise.
+
+---
+
+Fusszeile:
+<!--Setzen Sie das heutige Datum ein-->
+Copyright by <!--dein Name -->
