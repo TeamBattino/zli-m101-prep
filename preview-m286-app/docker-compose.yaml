@@ -1,0 +1,16 @@
+services:
+  m286:
+    build: .
+    container_name: preview-m286
+    restart: unless-stopped
+    networks:
+      - homelab-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+networks:
+  homelab-network:
+    external: true

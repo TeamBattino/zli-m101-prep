@@ -655,8 +655,9 @@ const CALC = {
         make() {
             const U = ["Byte", "KB", "MB", "GB", "TB"];
             let a = rnd(1, 4), b;
-            do { b = rnd(0, 4); } while (b === a || Math.abs(a - b) > 3);
-            const v = pick([0.5, 1.5, 2, 3.2, 7, 12, 64, 250, 750]);
+            // in grössere Einheit höchstens 2 Stufen, sonst werden die Zahlen winzig
+            do { b = rnd(0, 4); } while (b === a || (b < a && a - b > 3) || (b > a && b - a > 2));
+            const v = b > a ? pick([250, 750, 1500, 4096, 12000, 64000, 500000]) : pick([0.5, 1.5, 2, 3.2, 7, 12, 64, 250, 750]);
             const ans = v * 1000 ** (a - b);
             const step = a > b ? `× 1000 pro Stufe (${a - b} Stufe${a - b > 1 ? "n" : ""}) = × ${fmt(1000 ** (a - b))}` : `÷ 1000 pro Stufe (${b - a} Stufe${b - a > 1 ? "n" : ""}) = ÷ ${fmt(1000 ** (b - a))}`;
             return {
@@ -800,7 +801,7 @@ function cCheck() {
         $("cFb").textContent = "Bitte eine Zahl eingeben.";
         return;
     }
-    const tol = Math.max(Math.abs(cCur.ans) * 0.01, 0.005);
+    const tol = Math.abs(cCur.ans) * 0.01 || 1e-12;
     const ok = Math.abs(v - cCur.ans) <= tol;
     if (!cDone) {
         cDone = true;
@@ -809,7 +810,7 @@ function cCheck() {
         $("cScore").textContent = `${cRight} / ${cTotal}`;
     }
     $("cFb").className = "fb " + (ok ? "ok" : "no");
-    $("cFb").innerHTML = (ok ? "<b>Richtig!</b>" : `<b>Leider falsch.</b> Richtig: ${fmt(cCur.ans, 3)} ${cCur.unit}`) +
+    $("cFb").innerHTML = (ok ? "<b>Richtig!</b>" : `<b>Leider falsch.</b> Richtig: ${Math.abs(cCur.ans) < 0.01 && cCur.ans !== 0 ? Number(cCur.ans.toPrecision(3)) : fmt(cCur.ans, 3)} ${cCur.unit}`) +
         `<div class="solution"></div>`;
     $("cFb").querySelector(".solution").textContent = cCur.sol;
 }
