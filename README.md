@@ -9,6 +9,7 @@ mit normalem HTML und CSS. Kein JavaScript, keine Tools nötig: nur Browser und 
 | [`AGENT-GUIDE.md`](AGENT-GUIDE.md) | **Das Wichtigste.** Ablauf in der Prüfung, Regeln, Fehlersuche, Code-Muster für alle typischen Aufgaben, Schlusskontrolle. Auch für die KI gedacht. |
 | [`cheatsheet/cheatsheet.pdf`](cheatsheet/cheatsheet.pdf) | **Spickzettel für die Theorie-LB**: 1 A4-Blatt beidseitig (2 Seiten), alle Theorie aus dem Kurs. Doppelseitig, 100 % / „Tatsächliche Grösse“ drucken. Quelle: `cheatsheet.html` |
 | [`cheatsheet-m286/m286-spickzettel.pdf`](cheatsheet-m286/m286-spickzettel.pdf) | **BZZ M286 LB1**: Vorlage zum **Abschreiben von Hand** (1 A4-Seite einseitig). Gedruckte Zettel werden an der LB eingezogen! |
+| [`practice-m286/index.html`](practice-m286/index.html) | **BZZ M286 Trainer** (offline, Doppelklick): Karteikarten, Quiz, Rechentrainer mit Zufallszahlen und Lösungsweg, Nutzwertanalyse |
 | `01-bistro-fehler/` | Übung 1: HTML/CSS-Fehler finden (wie Kurs-Übung 3.3), Navigation, Tabelle |
 | `02-wanderverein-flexbox/` | Übung 2: Layout mit Flexbox und semantischen Tags (wie 5.1/5.2a), Spezifität |
 | `03-fotoclub-grid/` | Übung 3: Galerie mit CSS Grid und Hover (wie 5.3), Tabelle, Links, Dateinamen |

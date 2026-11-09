@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M286 Trainer</title>
+<style>
+:root {
+    --bg: #f5f6f8;
+    --card: #ffffff;
+    --text: #1b1d21;
+    --muted: #666b75;
+    --line: #dde0e5;
+    --accent: #1f5fa8;
+    --ok: #1d7a3a;
+    --okbg: #e3f3e8;
+    --bad: #c0172b;
+    --badbg: #fbe5e8;
+    --hl: #fff6d6;
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #16181c;
+        --card: #212429;
+        --text: #e8eaed;
+        --muted: #9aa0a9;
+        --line: #353a41;
+        --accent: #6aa5ec;
+        --ok: #5cc27f;
+        --okbg: #1f3527;
+        --bad: #f0707f;
+        --badbg: #3b2026;
+        --hl: #3a3420;
+    }
+}
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.45;
+}
+header {
+    background: var(--card);
+    border-bottom: 1px solid var(--line);
+    padding: 12px 16px 0;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+header h1 { margin: 0 0 8px; font-size: 1.15rem; }
+header h1 span { color: var(--muted); font-weight: normal; font-size: 0.9rem; }
+nav { display: flex; gap: 4px; overflow-x: auto; }
+nav button {
+    border: none;
+    background: none;
+    padding: 8px 12px;
+    font: inherit;
+    color: var(--muted);
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+}
+nav button.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+main { max-width: 760px; margin: 0 auto; padding: 16px; }
+.panel { display: none; }
+.panel.active { display: block; }
+.card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 14px;
+}
+.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.spread { justify-content: space-between; }
+select, input, button.btn {
+    font: inherit;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--text);
+}
+button.btn { cursor: pointer; }
+button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.muted { color: var(--muted); font-size: 0.9rem; }
+.flash {
+    min-height: 210px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    font-size: 1.15rem;
+}
+.flash .side { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 10px; }
+.flash.back { background: var(--hl); }
+.tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    padding: 1px 8px;
+    border-radius: 10px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    color: var(--muted);
+}
+.choices { display: grid; gap: 8px; margin-top: 12px; }
+.choices button {
+    text-align: left;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--text);
+    font: inherit;
+    cursor: pointer;
+}
+.choices button.right { background: var(--okbg); border-color: var(--ok); }
+.choices button.wrong { background: var(--badbg); border-color: var(--bad); }
+.fb { margin-top: 12px; padding: 10px 12px; border-radius: 8px; display: none; }
+.fb.ok { display: block; background: var(--okbg); }
+.fb.no { display: block; background: var(--badbg); }
+.solution { white-space: pre-wrap; font-family: ui-monospace, Consolas, monospace; font-size: 0.9rem; margin-top: 8px; }
+.q { font-size: 1.05rem; }
+.score { font-weight: 600; }
+table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+th, td { border: 1px solid var(--line); padding: 6px; text-align: left; }
+td input { width: 64px; padding: 4px 6px; }
+.win { background: var(--okbg); font-weight: 600; }
+.formula { background: var(--hl); padding: 8px 10px; border-radius: 8px; font-family: ui-monospace, Consolas, monospace; font-size: 0.92rem; }
+@media (max-width: 520px) {
+    main { padding: 10px; }
+    .flash { min-height: 180px; font-size: 1.05rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>M286 Trainer <span>BZZ · ICT-Grundlagen · LB1 = LU01–LU05</span></h1>
+    <nav>
+        <button data-tab="karten" class="active">Karteikarten</button>
+        <button data-tab="quiz">Quiz</button>
+        <button data-tab="rechnen">Rechnen</button>
+        <button data-tab="nwa">Nutzwertanalyse</button>
+    </nav>
+</header>
+
+<main>
+
+<!-- ============ KARTEIKARTEN ============ -->
+<section id="karten" class="panel active">
+    <div class="card row spread">
+        <div class="row">
+            <select id="kTopic"></select>
+            <select id="kDir">
+                <option value="td">Begriff → Erklärung</option>
+                <option value="dt">Erklärung → Begriff</option>
+            </select>
+        </div>
+        <span class="muted" id="kCount"></span>
+    </div>
+    <div class="card flash" id="kCard"></div>
+    <div class="row spread">
+        <button class="btn" id="kPrev">← Zurück</button>
+        <button class="btn" id="kShuffle">Mischen</button>
+        <button class="btn primary" id="kNext">Weiter →</button>
+    </div>
+    <p class="muted">Tippen/Klicken auf die Karte dreht sie um. Tastatur: Leertaste = umdrehen, Pfeile = vor/zurück.</p>
+</section>
+
+<!-- ============ QUIZ ============ -->
+<section id="quiz" class="panel">
+    <div class="card row spread">
+        <select id="qTopic"></select>
+        <span class="score" id="qScore">0 / 0</span>
+    </div>
+    <div class="card">
+        <div class="row spread"><span class="tag" id="qTag"></span><span class="muted" id="qType"></span></div>
+        <p class="q" id="qText"></p>
+        <div class="choices" id="qChoices"></div>
+        <div class="fb" id="qFb"></div>
+        <div class="row" style="margin-top:12px"><button class="btn primary" id="qNext">Nächste Frage →</button></div>
+    </div>
+</section>
+
+<!-- ============ RECHNEN ============ -->
+<section id="rechnen" class="panel">
+    <div class="card row spread">
+        <select id="cType"></select>
+        <span class="score" id="cScore">0 / 0</span>
+    </div>
+    <div class="card">
+        <p class="q" id="cText"></p>
+        <div class="row">
+            <input id="cIn" inputmode="decimal" autocomplete="off" placeholder="Antwort">
+            <span id="cUnit" class="muted"></span>
+            <button class="btn primary" id="cCheck">Prüfen</button>
+            <button class="btn" id="cNew">Neue Aufgabe</button>
+        </div>
+        <div class="fb" id="cFb"></div>
+    </div>
+    <div class="card">
+        <b>Formeln</b>
+        <div class="formula" style="margin-top:6px">Zeit = Datenmenge / Geschwindigkeit
+<br>Mbit/s ÷ 8 = MB/s &nbsp;·&nbsp; 1 KB = 1000 B (wie im Kurs) &nbsp;·&nbsp; 1 KiB = 1024 B
+<br>GB → GiB: × 10⁹ ÷ 2³⁰ (= ÷ 1.0737)
+<br>Bild = Breite × Höhe × Farbtiefe(Bit) ÷ 8 &nbsp;·&nbsp; Text = Zeichen × 1 Byte
+<br>Audio = Abtastrate × Bit × Kanäle × Sekunden ÷ 8
+<br>Note = 5 × Punkte ÷ Max + 1</div>
+        <p class="muted">Dezimalkomma oder -punkt geht beide. Antworten innerhalb ±1 % gelten als richtig (Rundung).</p>
+    </div>
+</section>
+
+<!-- ============ NUTZWERTANALYSE ============ -->
+<section id="nwa" class="panel">
+    <div class="card">
+        <b>So geht die Nutzwertanalyse (LU02)</b>
+        <ol>
+            <li><b>Kriterien</b> festlegen (relevant und möglichst objektiv/messbar).</li>
+            <li>Jedem Kriterium eine <b>Gewichtung</b> geben, zusammen <b>100 %</b>.</li>
+            <li>Jede Variante pro Kriterium mit <b>Punkten</b> bewerten (hier 1–5, 5 = am besten).</li>
+            <li><b>Teilnutzen</b> = Punkte × Gewichtung. Alle Teilnutzen addieren = <b>Nutzwert</b>.</li>
+            <li>Höchster Nutzwert = Empfehlung (mit Begründung).</li>
+        </ol>
+        <p class="muted">Beispiel: Notebook für eine Lernende, die viel unterwegs ist. Ändere Gewichte und Punkte und schau, wie sich die Empfehlung ändert.</p>
+    </div>
+    <div class="card" style="overflow-x:auto">
+        <table id="nwaTable"></table>
+        <p id="nwaMsg" style="margin-bottom:0"></p>
+    </div>
+</section>
+
+</main>
+
+<script>
+"use strict";
+
+/* ---------------------------------------------------------------
+   Daten: Begriffe aus dem Moodle-Kurs M286 (BZZ), LU01–LU10
+   lb1: true = Stoff der LB1 (LU01–LU05)
+---------------------------------------------------------------- */
+const T = {
+    LU01: "LU01 Computer-Aufbau",
+    LU02: "LU02 Geräte vergleichen",
+    LU03: "LU03 EVA-Prinzip",
+    LU04: "LU04 Schnittstellen",
+    LU05: "LU05 Speicher & Bandbreite",
+    LU06: "LU06 Software & Lizenzen",
+    LU07: "LU07 Cloud & Tools",
+    LU10: "LU10 Kommandozeile"
+};
+
+const CARDS = [
+    // LU01
+    ["LU01", "CPU (Prozessor)", "Führt die Befehle der Programme aus und rechnet; Kennzahlen: Anzahl Kerne und Takt in GHz."],
+    ["LU01", "Mainboard", "Hauptplatine, verbindet alle Komponenten (CPU-Sockel, RAM-Steckplätze, Anschlüsse)."],
+    ["LU01", "RAM (Arbeitsspeicher)", "Schneller, flüchtiger Speicher für laufende Programme; Inhalt geht ohne Strom verloren."],
+    ["LU01", "SSD", "Massenspeicher mit Flash-Speicher: schnell, leise, keine beweglichen Teile."],
+    ["LU01", "HDD", "Massenspeicher mit Magnetscheiben: günstig pro GB, aber langsamer als eine SSD."],
+    ["LU01", "GPU (Grafikkarte)", "Berechnet und gibt das Bild aus; wichtig für Multimedia und Games."],
+    ["LU01", "Netzteil", "Versorgt die Komponenten mit Strom (wandelt Netzstrom in Gleichstrom)."],
+    ["LU01", "Peripheriegerät", "Gerät ausserhalb des Computers, z. B. Tastatur, Maus, Monitor, Drucker, Scanner, externes Laufwerk."],
+    ["LU01", "Hardware", "Die physischen, anfassbaren Teile eines Computers."],
+    ["LU01", "Netzwerk", "Mehrere verbundene Geräte, die Daten austauschen (z. B. LAN, WLAN, Internet)."],
+    // LU02
+    ["LU02", "Objektives Kriterium", "Messbar, z. B. Auflösung, Kontrast, Speichergrösse, Preis."],
+    ["LU02", "Subjektives Kriterium", "Nach Gefühl, nicht messbar, z. B. schöner, schneller, besser."],
+    ["LU02", "Nutzwertanalyse", "Entscheidungshilfe: Kriterien gewichten, Varianten mit Punkten bewerten, Punkte × Gewichtung summieren; höchster Nutzwert gewinnt."],
+    ["LU02", "Gewichtung", "Wie wichtig ein Kriterium ist; alle Gewichtungen zusammen ergeben 100 %."],
+    ["LU02", "Teilnutzen", "Punkte × Gewichtung eines Kriteriums; die Summe aller Teilnutzen ist der Nutzwert."],
+    // LU03
+    ["LU03", "EVA-Prinzip", "Eingabe → Verarbeitung → Ausgabe: Grundablauf jeder Datenverarbeitung."],
+    ["LU03", "Eingabe (EVA)", "Daten/Befehle gelangen in den Computer, z. B. Tastatur, Maus, Scanner, Mikrofon, Sensoren."],
+    ["LU03", "Verarbeitung (EVA)", "Ein Programm rechnet, vergleicht, sortiert, entscheidet; Verarbeiter: Hardware (CPU), Betriebssystem, Software."],
+    ["LU03", "Ausgabe (EVA)", "Ergebnis wird ausgegeben, z. B. Bildschirm, Drucker, Lautsprecher, Netzwerk."],
+    ["LU03", "E/A-Gerät (I/O)", "Gerät für Ein- und Ausgabe, z. B. Touchscreen oder Multifunktionsdrucker (Scanner + Drucker)."],
+    ["LU03", "Bancomat: Eingabe", "Kartenleser, Tastenfeld/Knöpfe, Touchscreen."],
+    ["LU03", "Bancomat: Verarbeitung", "Hardware (Prozessor), Bancomat-Software (PIN prüfen, Transaktion), Betriebssystem."],
+    ["LU03", "Bancomat: Ausgabe", "Geldausgabe, Bildschirm, Karten-Rückgabe, Belegdrucker."],
+    // LU04
+    ["LU04", "Bluetooth", "Funkstandard für kurze Distanzen im 2.4-GHz-ISM-Band; Reichweite ca. 10 m; Bluetooth 5.0 bis 2 Mbit/s."],
+    ["LU04", "BLE (Bluetooth Low Energy)", "Besonders stromsparende Bluetooth-Variante, ideal für kleine Geräte wie Klicker, Tastaturen, Sensoren."],
+    ["LU04", "HDMI", "Digitale Schnittstelle für Bild und Ton über ein Kabel (seit 2002); Standard bei TV, Beamer, Monitor."],
+    ["LU04", "HDCP", "Kopierschutz in HDMI gegen unbefugtes Kopieren geschützter Inhalte."],
+    ["LU04", "HDMI Typ A / C / D", "A = Standard-HDMI, C = Mini-HDMI, D = Micro-HDMI."],
+    ["LU04", "HDMI 2.1", "Unterstützt 8K sowie 4K bei bis zu 120 Hz."],
+    ["LU04", "HDMI 1.4", "Brachte 4K-Unterstützung und Ethernet über HDMI (2009)."],
+    ["LU04", "VGA / SCART", "Ältere analoge Bildschnittstellen (im Gegensatz zum digitalen HDMI)."],
+    ["LU04", "Ethernet", "Kabelgebundenes Netzwerk (LAN) mit Twisted-Pair-Kabel und RJ-45-Stecker; stabil, sicher, max. 100 m pro Kabel."],
+    ["LU04", "Fast Ethernet", "100 Mbit/s."],
+    ["LU04", "Gigabit Ethernet", "1 Gbit/s (≈ 125 MB/s)."],
+    ["LU04", "RJ-45", "Stecker für Netzwerkkabel (Ethernet)."],
+    ["LU04", "WLAN", "Drahtloses Netzwerk nach IEEE 802.11; ca. 30 m in Gebäuden, bis 100 m im Freien; muss verschlüsselt werden (z. B. WPA3)."],
+    ["LU04", "Wi-Fi 4 (802.11n)", "Bis 600 Mbit/s."],
+    ["LU04", "Wi-Fi 5 (802.11ac)", "Bis 3.5 Gbit/s (im Kurs-Rechenbeispiel praktisch ca. 433 Mbit/s ≈ 54 MB/s)."],
+    ["LU04", "Wi-Fi 6 (802.11ax)", "Bis 9.6 Gbit/s."],
+    ["LU04", "USB", "Universelle externe Schnittstelle für Peripherie; Hot-Plugging, billig, abwärtskompatibel, liefert Strom."],
+    ["LU04", "Hot-Plugging", "Geräte im laufenden Betrieb ein- und ausstecken."],
+    ["LU04", "USB 2.0", "High Speed: 480 Mbit/s brutto, praktisch ca. 40 MB/s; max. 0.5 A / 2.5 W (2000)."],
+    ["LU04", "USB 3.0 / 3.1 Gen 1", "SuperSpeed: 5 Gbit/s brutto, praktisch ca. 450 MB/s (2008)."],
+    ["LU04", "USB 3.1 Gen 2", "10 Gbit/s brutto, praktisch ca. 800 MB/s (2013)."],
+    ["LU04", "USB 3.2", "20 Gbit/s brutto (2017)."],
+    ["LU04", "USB 4", "40 Gbit/s brutto (2019)."],
+    ["LU04", "USB 1.0/1.1", "Low Speed 1.5 Mbit/s, Full Speed 12 Mbit/s (1998)."],
+    ["LU04", "USB-A-Stecker", "Stecker auf der Host-Seite (Computer)."],
+    ["LU04", "USB-B-Stecker", "Stecker auf der Endgeräte-Seite (z. B. Drucker); kleiner: Mini-B, Micro-B."],
+    ["LU04", "USB-C", "Verdrehsicher (beidseitig steckbar), gleicher Stecker an beiden Enden, bis 100 W mit Power Delivery; nur per Adapter kompatibel zu alten Steckern."],
+    ["LU04", "USB Power Delivery (PD)", "Ladestandard über USB-C, bis 100 W, z. B. für Notebooks."],
+    ["LU04", "Häufigste USB-Probleme", "Schlechte oder zu lange Kabel; Verlängerungen und Hub-Kaskaden vermeiden."],
+    ["LU04", "ISM-Band", "Weltweit freigegebene Frequenzbänder (Industrial, Scientific, Medical), z. B. 2.4 GHz für WLAN und Bluetooth."],
+    ["LU04", "Interferenz", "Funkwellen im gleichen Frequenzbereich überlagern sich und stören die Übertragung."],
+    // LU05
+    ["LU05", "Transistor", "Elektronischer Schalter: lässt Strom durch (1) oder nicht (0); Grundbaustein jedes Chips."],
+    ["LU05", "Bit", "Kleinste Informationseinheit, 0 oder 1."],
+    ["LU05", "Byte", "8 Bit; 256 verschiedene Kombinationen."],
+    ["LU05", "ASCII", "Tabelle, die Zahlen Zeichen zuordnet (65 = A); 1 Zeichen = 1 Byte."],
+    ["LU05", "Basis 10 (Dezimal)", "Vielfache in 1000er-Schritten: 1 KB = 1000 B, 1 MB = 10⁶ B, 1 GB = 10⁹ B (Herstellerangabe)."],
+    ["LU05", "Basis 2 (Binär)", "Vielfache in 1024er-Schritten: 1 KiB = 1024 B, 1 MiB = 2²⁰ B, 1 GiB = 2³⁰ B (Betriebssystem)."],
+    ["LU05", "KiB / MiB / GiB", "Kibi-, Mebi-, Gibibyte: binäre Einheiten (2¹⁰, 2²⁰, 2³⁰ Byte)."],
+    ["LU05", "500 GB Festplatte im Betriebssystem", "Zeigt nur ca. 465 GiB an (500 · 10⁹ / 2³⁰)."],
+    ["LU05", "Bandbreite", "Maximale Datenmenge pro Zeit über eine Verbindung; Einheit bit/s (bps)."],
+    ["LU05", "1 Gbit/s in MB/s", "125 MB/s (Bit ÷ 8 = Byte)."],
+    ["LU05", "Übertragungszeit", "Zeit = Datenmenge / Geschwindigkeit (in gleichen Einheiten)."],
+    ["LU05", "Übertragungsmedium", "Weg, auf dem Signale vom Sender zum Empfänger gelangen: Draht, Funk oder Licht."],
+    ["LU05", "Drahtweg (Kupfer)", "Elektrische Signale über Metallkabel (z. B. Twisted Pair); günstig, störanfällig, Dämpfung über die Länge (ca. 100 m)."],
+    ["LU05", "Funkweg", "Elektromagnetische Wellen durch den freien Raum (Luftschnittstelle); meist langsamer und instabiler, Hindernisse dämpfen."],
+    ["LU05", "Lichtweg (Glasfaser, LWL)", "Lichtsignale in Glas-/Kunststofffasern; sehr hohe Bandbreite, grosse Distanzen ohne Verstärker, kaum störanfällig."],
+    ["LU05", "Infrarot", "Licht durch den freien Raum (z. B. Fernbedienung); sehr kurz, keine Hindernisse erlaubt."],
+    ["LU05", "Störfaktoren Kupfer", "Elektromagnetische Interferenzen, Länge (Dämpfung), schlechte Kabel/Abschirmung, Steckverbindungen, Hitze/Feuchtigkeit."],
+    ["LU05", "Störfaktoren Glasfaser", "Zu starke Biegung (Biegeverlust), Steckverbindungen, Schmutz, Mikrorisse, Hitze/Zug/Druck."],
+    ["LU05", "Störfaktoren Funk", "Benachbarte Funknetze (Interferenz), Hindernisse wie Mauern, geringe Sendeleistung."],
+    // LU06
+    ["LU06", "Software", "Gesamtheit aller Programme und Daten auf einem Gerät; immateriell."],
+    ["LU06", "Systemsoftware", "Macht die Hardware nutzbar: Betriebssystem, Gerätetreiber, Firmware."],
+    ["LU06", "Anwendungssoftware", "Erledigt konkrete Aufgaben: Word, Excel, Photoshop, Browser."],
+    ["LU06", "Utility-Software", "Hilfsprogramme: Virenscanner, Backup, Komprimierung (7-Zip, WinRAR)."],
+    ["LU06", "Paketmanager", "Installiert/aktualisiert Software per Befehl, z. B. winget (Windows), Homebrew (Mac)."],
+    ["LU06", "C:\\Program Files (x86)", "Installationsordner für 32-Bit-Programme unter Windows (64-Bit: C:\\Program Files)."],
+    ["LU06", "Gründe für Updates", "Sicherheit (Lücken schliessen), Stabilität (Fehler beheben), neue Funktionen, Kompatibilität."],
+    ["LU06", "Warum nicht sofort updaten?", "Grosse Updates können Programme/Treiber inkompatibel machen oder selbst Fehler enthalten."],
+    ["LU06", "Automatische Updates", "Vorteil: Sicherheit, bequem. Nachteil: Kontrollverlust, Neustart zur Unzeit, mögliche Fehler."],
+    ["LU06", "Lizenz", "Rechtliche Vereinbarung, was man mit einer Software/einem Werk tun darf."],
+    ["LU06", "Proprietäre Software", "Geschlossen, kommerziell; Nutzung nur mit Kauf/Lizenzvertrag; z. B. Microsoft Office, Photoshop."],
+    ["LU06", "Freeware", "Kostenlos nutzbar, aber Quellcode nicht offen, keine Änderungen; z. B. Google Chrome, Skype."],
+    ["LU06", "Shareware", "Testversion, danach kostenpflichtig; z. B. WinRAR."],
+    ["LU06", "Freemium", "Basisversion gratis, Zusatzfunktionen kostenpflichtig; z. B. Spotify, Slack, Trello."],
+    ["LU06", "Open Source", "Quellcode offen; Nutzung, Änderung, Weitergabe erlaubt (je nach Lizenz); z. B. Linux, VLC."],
+    ["LU06", "Einzelplatzlizenz", "Software darf auf einem einzigen Computer installiert werden."],
+    ["LU06", "Mehrplatzlizenz", "Installation auf mehreren Computern eines Netzwerks/Unternehmens."],
+    ["LU06", "OEM-Lizenz", "Für Hardwarehersteller zum Vorinstallieren; an die Hardware gebunden."],
+    ["LU06", "Site-Lizenz", "Beliebig viele Computer an einem bestimmten Standort."],
+    ["LU06", "Named-User-Lizenz", "An eine bestimmte Person gebunden, egal auf wie vielen Geräten."],
+    ["LU06", "Concurrent-User-Lizenz", "Legt fest, wie viele Benutzer gleichzeitig arbeiten dürfen."],
+    ["LU06", "Evaluation-Lizenz", "Zeitlich begrenzte Testlizenz vor dem Kauf."],
+    ["LU06", "GPL", "Open-Source-Lizenz mit Copyleft: Abgeleitete Werke müssen ebenfalls unter GPL mit Quellcode veröffentlicht werden."],
+    ["LU06", "Copyleft", "Änderungen/abgeleitete Werke müssen unter denselben freien Bedingungen weitergegeben werden."],
+    ["LU06", "MIT-Lizenz", "Sehr liberale Open-Source-Lizenz ohne Copyleft; Urheberhinweis muss bleiben."],
+    ["LU06", "Apache License", "Open-Source-Lizenz ohne Pflicht zur Quellcode-Veröffentlichung, mit Patentlizenz."],
+    ["LU06", "Creative Commons", "Standardlizenzen für kreative Werke aus BY, NC, ND, SA."],
+    ["LU06", "CC BY", "Namensnennung (Urheber nennen)."],
+    ["LU06", "CC NC", "Nicht kommerziell."],
+    ["LU06", "CC ND", "Keine Bearbeitung."],
+    ["LU06", "CC SA", "Weitergabe unter gleichen Bedingungen."],
+    // LU07
+    ["LU07", "Projektmanagement-Tool (PMT)", "Zentrale Drehscheibe für Planung, Aufgaben, Status und Dateien eines Teams, z. B. Trello."],
+    ["LU07", "Cloud-Speicher", "Daten werden über das Internet auf Servern eines Anbieters in Rechenzentren gespeichert."],
+    ["LU07", "Synchronisation", "Dateien liegen lokal und in der Cloud; Änderungen werden automatisch abgeglichen."],
+    ["LU07", "OneDrive Versionierung", "Bei jeder Bearbeitung entsteht eine neue Version; alte Stände wiederherstellbar."],
+    ["LU07", "OneDrive Papierkorb", "Gelöschte Dateien bis 93 Tage wiederherstellbar."],
+    ["LU07", "Echtzeit-Zusammenarbeit", "Mehrere Personen bearbeiten gleichzeitig dasselbe Dokument (Word, Excel, PowerPoint)."],
+    // LU10
+    ["LU10", "GUI", "Graphical User Interface: Bedienung mit Maus und Fenstern."],
+    ["LU10", "Terminal / Kommandozeile", "Ein-/Ausgabeschnittstelle, um Befehle direkt einzutippen (macOS/Linux: Terminal, Windows: Eingabeaufforderung/CMD)."],
+    ["LU10", "Warum Kommandozeile?", "Server haben oft keine GUI, Tastatur ist schneller, Tools wie Git sind per Befehl einfacher."],
+    ["LU10", "pwd", "Linux/macOS: zeigt den Pfad des aktuellen Verzeichnisses."],
+    ["LU10", "ls / dir", "Inhalt eines Verzeichnisses auflisten (ls = Linux/macOS, dir = Windows)."],
+    ["LU10", "cd", "In ein anderes Verzeichnis wechseln (alle Systeme)."],
+    ["LU10", "mkdir", "Neues Verzeichnis erstellen (Windows auch md)."],
+    ["LU10", "touch", "Linux/macOS: neue leere Datei(en) erstellen."],
+    ["LU10", "cp / copy", "Datei kopieren (cp = Linux/macOS, copy/xcopy = Windows)."],
+    ["LU10", "mv / move", "Verschieben oder umbenennen (mv = Linux/macOS, move = Windows)."],
+    ["LU10", "rm / del", "Datei löschen (rm = Linux/macOS, del = Windows)."],
+    ["LU10", "rm -r / rmdir /s", "Ordner mitsamt Inhalt löschen (Linux/macOS / Windows)."],
+    ["LU10", "ren", "Windows: Datei oder Ordner umbenennen."],
+    ["LU10", "man / help", "Hilfe zu einem Befehl: man ls (Linux/macOS), help dir oder dir /? (Windows)."],
+    ["LU10", "Wildcards * und ?", "* = beliebig viele Zeichen, ? = genau ein Zeichen (z. B. ls *.txt)."],
+    ["LU10", "ls -a", "Zeigt auch versteckte Einträge (z. B. .config, . und ..)."]
+].map(([topic, term, def], i) => ({ id: i, topic, term, def, lb1: ["LU01","LU02","LU03","LU04","LU05"].includes(topic) }));
+
+/* Feste Multiple-Choice-Fragen (Fakten aus dem Kurs) */
+const MC = [
+    ["LU05", "Wie viele Bit hat ein Byte?", ["8", "4", "10", "16"]],
+    ["LU05", "Wie viele verschiedene Werte kann ein Byte darstellen?", ["256", "8", "255", "1024"]],
+    ["LU05", "1 Gbit/s entspricht wie vielen MB/s?", ["125 MB/s", "1000 MB/s", "100 MB/s", "8 MB/s"]],
+    ["LU05", "Wie viele Byte sind 1 KiB?", ["1024", "1000", "1000000", "8192"]],
+    ["LU05", "Eine 500-GB-Festplatte zeigt im Betriebssystem ca. …", ["465 GiB", "500 GiB", "512 GiB", "476 GiB"]],
+    ["LU05", "In welcher Einheit wird Bandbreite angegeben?", ["bit pro Sekunde", "Byte pro Minute", "Hertz", "Watt"]],
+    ["LU05", "Welches Übertragungsmedium ist am wenigsten störanfällig?", ["Glasfaser", "Kupferkabel", "WLAN", "Bluetooth"]],
+    ["LU05", "Was ist bei Glasfaser ein typischer Störfaktor?", ["Zu starkes Biegen", "Elektromagnetische Felder", "Benachbarte WLANs", "Kabellänge über 100 m"]],
+    ["LU05", "Wie lange dauert 1.8 GB über Gigabit-Ethernet (125 MB/s)?", ["ca. 14 s", "ca. 1.8 s", "ca. 33 s", "ca. 2 h"]],
+    ["LU04", "Welche Schnittstelle überträgt Bild UND Ton digital über ein Kabel?", ["HDMI", "VGA", "RJ-45", "Bluetooth"]],
+    ["LU04", "Welcher HDMI-Stecker ist Micro-HDMI?", ["Typ D", "Typ A", "Typ C", "Typ B"]],
+    ["LU04", "Maximale Länge eines Ethernet-Kupferkabels?", ["100 m", "10 m", "30 m", "1 km"]],
+    ["LU04", "In welchem Frequenzband arbeitet Bluetooth?", ["2.4 GHz", "5 GHz", "60 GHz", "900 MHz"]],
+    ["LU04", "Typische Reichweite von Bluetooth (Kopfhörer, Handy)?", ["ca. 10 m", "ca. 1 m", "ca. 100 m", "ca. 1 km"]],
+    ["LU04", "Bruttodatenrate von USB 2.0?", ["480 Mbit/s", "5 Gbit/s", "12 Mbit/s", "10 Gbit/s"]],
+    ["LU04", "Bruttodatenrate von USB 3.0?", ["5 Gbit/s", "480 Mbit/s", "40 Gbit/s", "1 Gbit/s"]],
+    ["LU04", "Bis zu welcher Leistung lädt USB-C mit Power Delivery?", ["100 W", "2.5 W", "15 W", "1000 W"]],
+    ["LU04", "Was ist KEIN Merkmal von USB-C?", ["Nur in einer Richtung steckbar", "Beidseitig steckbar", "Gleicher Stecker an beiden Kabelenden", "Bis 100 W"]],
+    ["LU04", "Welcher Stecker gehört zum Ethernet-Kabel?", ["RJ-45", "USB-B", "HDMI Typ A", "Klinke 3.5 mm"]],
+    ["LU04", "WLAN beruht auf welchem Standard?", ["IEEE 802.11", "IEEE 802.3", "USB 3.2", "HDCP"]],
+    ["LU04", "Was ist der Hauptvorteil von Ethernet gegenüber WLAN?", ["Stabiler und sicherer", "Mobiler", "Keine Kabel nötig", "Grössere Reichweite pro Kabel als 1 km"]],
+    ["LU04", "Was ist die häufigste Ursache für USB-Probleme laut Kurs?", ["Schlechte und zu lange Kabel", "Zu wenig RAM", "Falsche HDMI-Version", "Zu schwaches WLAN"]],
+    ["LU04", "Was bedeutet Hot-Plugging?", ["Ein-/Ausstecken im laufenden Betrieb", "Gerät wird beim Laden heiss", "Laden mit 100 W", "Automatische Treiber-Updates"]],
+    ["LU03", "Wozu gehört der Kartenleser beim Bancomaten (beim Einstecken)?", ["Eingabe", "Verarbeitung", "Ausgabe", "Speicherung"]],
+    ["LU03", "Das Prüfen der PIN beim Bancomaten ist …", ["Verarbeitung", "Eingabe", "Ausgabe", "Peripherie"]],
+    ["LU03", "Welches Gerät ist Ein- UND Ausgabegerät?", ["Touchscreen", "Maus", "Lautsprecher", "Mikrofon"]],
+    ["LU03", "Wofür steht EVA?", ["Eingabe, Verarbeitung, Ausgabe", "Einlesen, Vergleichen, Abspeichern", "Energie, Verbindung, Anschluss", "Eingang, Verteiler, Ausgang"]],
+    ["LU02", "Welches ist ein objektives Kriterium?", ["Bildschirmauflösung", "Sieht schöner aus", "Fühlt sich schneller an", "Gefällt mir besser"]],
+    ["LU02", "Wie viel ergeben alle Gewichtungen in einer Nutzwertanalyse zusammen?", ["100 %", "10 %", "1000 %", "beliebig"]],
+    ["LU01", "Welcher Speicher ist flüchtig?", ["RAM", "SSD", "HDD", "USB-Stick"]],
+    ["LU01", "Welche Komponente führt die Programmbefehle aus?", ["CPU", "Netzteil", "Mainboard", "Monitor"]],
+    ["LU06", "Spotify mit Gratis- und Premium-Version ist ein Beispiel für …", ["Freemium", "Freeware", "Shareware", "Open Source"]],
+    ["LU06", "Welche Lizenz hat Copyleft?", ["GPL", "MIT", "Apache", "Freeware"]],
+    ["LU06", "Software für genau einen Computer:", ["Einzelplatzlizenz", "Site-Lizenz", "Enterprise-Lizenz", "Concurrent-User-Lizenz"]],
+    ["LU06", "Ein Virenscanner ist …", ["Utility-Software", "Systemsoftware", "Anwendungssoftware", "Firmware"]],
+    ["LU06", "Was bedeutet CC NC?", ["Nicht kommerziell", "Keine Bearbeitung", "Namensnennung", "Gleiche Bedingungen"]],
+    ["LU07", "Wie lange sind gelöschte OneDrive-Dateien wiederherstellbar?", ["93 Tage", "7 Tage", "30 Tage", "1 Jahr"]],
+    ["LU10", "Welcher Windows-Befehl listet den Ordnerinhalt?", ["dir", "ls", "pwd", "touch"]],
+    ["LU10", "Welcher Befehl zeigt unter macOS/Linux das aktuelle Verzeichnis?", ["pwd", "cd", "dir", "man"]],
+    ["LU10", "Ordner mit Inhalt löschen unter macOS/Linux:", ["rm -r ordner", "rm ordner", "del ordner", "rmdir /s ordner"]],
+    ["LU10", "Was bedeutet die Wildcard ? ", ["Genau ein Zeichen", "Beliebig viele Zeichen", "Kein Zeichen", "Nur Zahlen"]]
+].map(([topic, q, opts]) => ({ topic, q, right: opts[0], opts, lb1: ["LU01","LU02","LU03","LU04","LU05"].includes(topic) }));
+
+/* ---------------- Hilfsfunktionen ---------------- */
+const $ = id => document.getElementById(id);
+const rnd = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+function shuffle(a) {
+    a = a.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+function fmt(x, d = 2) {
+    // Schweizer Schreibweise: 1'234.56
+    const r = Math.round(x * 10 ** d) / 10 ** d;
+    const [i, f] = r.toString().split(".");
+    return i.replace(/\B(?=(\d{3})+(?!\d))/g, "'") + (f ? "." + f : "");
+}
+function parseNum(s) {
+    s = String(s).trim().replace(/['’\s]/g, "").replace(",", ".");
+    if (s === "" || isNaN(Number(s))) return NaN;
+    return Number(s);
+}
+function store(key, val) {
+    try { localStorage.setItem("m286_" + key, JSON.stringify(val)); } catch (e) { /* ohne Speicher weiter */ }
+}
+function load(key, def) {
+    try { const v = localStorage.getItem("m286_" + key); return v ? JSON.parse(v) : def; } catch (e) { return def; }
+}
+function topicOptions(sel, withAll) {
+    const opts = [["lb1", "LB1-Stoff (LU01–LU05)"]];
+    if (withAll) opts.push(["all", "Alle Themen"]);
+    for (const k in T) opts.push([k, T[k]]);
+    sel.innerHTML = opts.map(([v, l]) => `<option value="${v}">${l}</option>`).join("");
+}
+function filterBy(list, v) {
+    if (v === "lb1") return list.filter(c => c.lb1);
+    if (v === "all") return list;
+    return list.filter(c => c.topic === v);
+}
+
+/* ---------------- Tabs ---------------- */
+document.querySelectorAll("nav button").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+    document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === b.dataset.tab));
+    store("tab", b.dataset.tab);
+}));
+
+/* ---------------- Karteikarten ---------------- */
+let kDeck = [], kPos = 0, kFlipped = false;
+topicOptions($("kTopic"), true);
+function kBuild() {
+    kDeck = shuffle(filterBy(CARDS, $("kTopic").value));
+    kPos = 0;
+    kShow(false);
+}
+function kShow(flipped) {
+    kFlipped = flipped;
+    const c = kDeck[kPos];
+    const termFirst = $("kDir").value === "td";
+    const front = termFirst ? c.term : c.def;
+    const back = termFirst ? c.def : c.term;
+    const el = $("kCard");
+    el.classList.toggle("back", flipped);
+    el.innerHTML = `<div class="side">${flipped ? (termFirst ? "Erklärung" : "Begriff") : (termFirst ? "Begriff" : "Erklärung")}</div>
+        <div>${flipped ? back : front}</div>
+        <div style="margin-top:14px"><span class="tag">${T[c.topic]}</span></div>`;
+    $("kCount").textContent = `Karte ${kPos + 1} / ${kDeck.length}`;
+}
+$("kCard").addEventListener("click", () => kShow(!kFlipped));
+$("kNext").addEventListener("click", () => { kPos = (kPos + 1) % kDeck.length; kShow(false); });
+$("kPrev").addEventListener("click", () => { kPos = (kPos - 1 + kDeck.length) % kDeck.length; kShow(false); });
+$("kShuffle").addEventListener("click", kBuild);
+$("kTopic").addEventListener("change", kBuild);
+$("kDir").addEventListener("change", () => kShow(false));
+document.addEventListener("keydown", e => {
+    if (!$("karten").classList.contains("active") || e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;
+    if (e.key === " ") { e.preventDefault(); kShow(!kFlipped); }
+    if (e.key === "ArrowRight") $("kNext").click();
+    if (e.key === "ArrowLeft") $("kPrev").click();
+});
+
+/* ---------------- Quiz ---------------- */
+let qRight = 0, qTotal = 0, qDone = false;
+topicOptions($("qTopic"), true);
+function qMake() {
+    const v = $("qTopic").value;
+    const facts = filterBy(MC, v);
+    const cards = filterBy(CARDS, v);
+    // halb feste Fragen, halb aus den Karten gebaut
+    if (facts.length && (Math.random() < 0.5 || cards.length < 4)) {
+        const f = pick(facts);
+        return { topic: f.topic, type: "Faktenfrage", q: f.q, right: f.right, opts: shuffle(f.opts) };
+    }
+    const c = pick(cards);
+    // Ablenker möglichst aus dem gleichen Thema
+    let pool = CARDS.filter(x => x.topic === c.topic && x.id !== c.id);
+    if (pool.length < 3) pool = CARDS.filter(x => x.id !== c.id);
+    const others = shuffle(pool).slice(0, 3);
+    if (Math.random() < 0.5) {
+        return { topic: c.topic, type: "Welcher Begriff passt?", q: c.def, right: c.term, opts: shuffle([c.term, ...others.map(o => o.term)]) };
+    }
+    return { topic: c.topic, type: "Welche Erklärung passt?", q: c.term, right: c.def, opts: shuffle([c.def, ...others.map(o => o.def)]) };
+}
+function qShow() {
+    const q = qMake();
+    qDone = false;
+    $("qTag").textContent = T[q.topic];
+    $("qType").textContent = q.type;
+    $("qText").textContent = q.q;
+    $("qFb").className = "fb";
+    const box = $("qChoices");
+    box.innerHTML = "";
+    q.opts.forEach(o => {
+        const b = document.createElement("button");
+        b.textContent = o;
+        b.addEventListener("click", () => {
+            if (qDone) return;
+            qDone = true;
+            qTotal++;
+            const ok = o === q.right;
+            if (ok) qRight++;
+            box.querySelectorAll("button").forEach(x => {
+                if (x.textContent === q.right) x.classList.add("right");
+                else if (x === b) x.classList.add("wrong");
+            });
+            $("qFb").className = "fb " + (ok ? "ok" : "no");
+            $("qFb").textContent = ok ? "Richtig!" : "Falsch. Richtig ist: " + q.right;
+            $("qScore").textContent = `${qRight} / ${qTotal}`;
+        });
+        box.appendChild(b);
+    });
+}
+$("qNext").addEventListener("click", qShow);
+$("qTopic").addEventListener("change", () => { qRight = 0; qTotal = 0; $("qScore").textContent = "0 / 0"; qShow(); });
+
+/* ---------------- Rechentrainer ---------------- */
+const IFACES = [
+    // Werte aus LU05c / LU05.A03 (praktische Geschwindigkeiten)
+    { name: "USB 2.0", mbs: 35 },
+    { name: "USB 3.0", mbs: 300 },
+    { name: "WLAN (Wi-Fi 5)", mbs: 54 },
+    { name: "Gigabit-Ethernet", mbs: 125 },
+    { name: "USB-C (USB 3.2 Gen 2)", mbs: 1250 },
+    { name: "Bluetooth 5.0", mbs: 0.25 }
+];
+const CALC = {
+    zeit: {
+        label: "Übertragungszeit (MB/s)",
+        make() {
+            const gb = pick([0.5, 0.8, 1.2, 1.8, 2.5, 3.6, 4.5, 6, 8, 12, 25]);
+            const i = pick(IFACES);
+            const mb = gb * 1000;
+            const t = mb / i.mbs;
+            const unitH = t > 3600;
+            return {
+                q: `Eine Datei mit ${fmt(gb)} GB wird über ${i.name} (ca. ${fmt(i.mbs)} MB/s) übertragen. Wie lange dauert das in Sekunden?`,
+                unit: "Sekunden",
+                ans: t,
+                sol: `Datenmenge in MB: ${fmt(gb)} GB × 1000 = ${fmt(mb)} MB\nZeit = Datenmenge / Geschwindigkeit\n= ${fmt(mb)} MB / ${fmt(i.mbs)} MB/s = ${fmt(t)} s` + (t >= 60 ? `\n= ${fmt(t / 60)} min` : "") + (unitH ? ` = ${fmt(t / 3600)} h` : "")
+            };
+        }
+    },
+    zeitBit: {
+        label: "Übertragungszeit (Mbit/s, ÷ 8)",
+        make() {
+            const mbit = pick([8, 16, 40, 50, 80, 100, 200, 400, 500, 1000]);
+            const size = pick([200, 400, 500, 750, 1200, 1500, 2000, 3000, 4500]);
+            const mbs = mbit / 8;
+            const t = size / mbs;
+            return {
+                q: `Ein Internetanschluss hat ${fmt(mbit)} Mbit/s. Wie viele Sekunden dauert der Download von ${fmt(size)} MB (theoretisch)?`,
+                unit: "Sekunden",
+                ans: t,
+                sol: `Achtung Bit ≠ Byte: ${fmt(mbit)} Mbit/s ÷ 8 = ${fmt(mbs, 3)} MB/s\nZeit = ${fmt(size)} MB / ${fmt(mbs, 3)} MB/s = ${fmt(t)} s` + (t >= 60 ? ` = ${fmt(t / 60)} min` : "")
+            };
+        }
+    },
+    menge: {
+        label: "Datenmenge aus Zeit",
+        make() {
+            const i = pick(IFACES.filter(x => x.mbs >= 35));
+            const s = pick([5, 10, 20, 30, 45, 60, 90, 120]);
+            const mb = i.mbs * s;
+            return {
+                q: `Über ${i.name} (ca. ${fmt(i.mbs)} MB/s) wird ${s} Sekunden lang kopiert. Wie viele GB wurden übertragen?`,
+                unit: "GB",
+                ans: mb / 1000,
+                sol: `Datenmenge = Geschwindigkeit × Zeit\n= ${fmt(i.mbs)} MB/s × ${s} s = ${fmt(mb)} MB\n= ${fmt(mb)} / 1000 = ${fmt(mb / 1000, 3)} GB`
+            };
+        }
+    },
+    bitbyte: {
+        label: "Bit ↔ Byte",
+        make() {
+            if (Math.random() < 0.5) {
+                const v = pick([8, 16, 50, 100, 250, 400, 500, 1000, 2500, 10000]);
+                return {
+                    q: `Wie viele MB/s sind ${fmt(v)} Mbit/s?`,
+                    unit: "MB/s",
+                    ans: v / 8,
+                    sol: `1 Byte = 8 Bit → durch 8 teilen\n${fmt(v)} Mbit/s ÷ 8 = ${fmt(v / 8, 3)} MB/s`
+                };
+            }
+            const v = pick([1, 5, 12.5, 25, 40, 54, 125, 300]);
+            return {
+                q: `Wie viele Mbit/s sind ${fmt(v)} MB/s?`,
+                unit: "Mbit/s",
+                ans: v * 8,
+                sol: `1 Byte = 8 Bit → mal 8\n${fmt(v)} MB/s × 8 = ${fmt(v * 8)} Mbit/s`
+            };
+        }
+    },
+    einheiten: {
+        label: "Einheiten umrechnen (Basis 10)",
+        make() {
+            const U = ["Byte", "KB", "MB", "GB", "TB"];
+            let a = rnd(1, 4), b;
+            do { b = rnd(0, 4); } while (b === a || Math.abs(a - b) > 3);
+            const v = pick([0.5, 1.5, 2, 3.2, 7, 12, 64, 250, 750]);
+            const ans = v * 1000 ** (a - b);
+            const step = a > b ? `× 1000 pro Stufe (${a - b} Stufe${a - b > 1 ? "n" : ""}) = × ${fmt(1000 ** (a - b))}` : `÷ 1000 pro Stufe (${b - a} Stufe${b - a > 1 ? "n" : ""}) = ÷ ${fmt(1000 ** (b - a))}`;
+            return {
+                q: `Wie viele ${U[b]} sind ${fmt(v)} ${U[a]}? (1 KB = 1000 Byte)`,
+                unit: U[b],
+                ans,
+                sol: `${U[a]} → ${U[b]}: ${step}\n${fmt(v)} ${U[a]} = ${fmt(ans, 6)} ${U[b]}`
+            };
+        }
+    },
+    gib: {
+        label: "GB ↔ GiB / KB ↔ KiB",
+        make() {
+            const r = Math.random();
+            if (r < 0.5) {
+                const gb = pick([64, 128, 250, 256, 500, 512, 1000, 2000]);
+                const gib = gb * 1e9 / 2 ** 30;
+                return {
+                    q: `Eine SSD hat laut Hersteller ${fmt(gb)} GB. Wie viele GiB zeigt das Betriebssystem an? (2 Dezimalstellen)`,
+                    unit: "GiB",
+                    ans: gib,
+                    sol: `Byte: ${fmt(gb)} × 10⁹ = ${fmt(gb * 1e9)} B\n1 GiB = 2³⁰ = 1'073'741'824 B\n${fmt(gb * 1e9)} / 1'073'741'824 = ${fmt(gib)} GiB`
+                };
+            }
+            if (r < 0.75) {
+                const kib = pick([1, 2, 4, 16, 64, 256]);
+                return {
+                    q: `Wie viele Byte sind ${kib} KiB?`,
+                    unit: "Byte",
+                    ans: kib * 1024,
+                    sol: `1 KiB = 2¹⁰ = 1024 Byte\n${kib} × 1024 = ${fmt(kib * 1024)} Byte`
+                };
+            }
+            const mib = pick([1, 2, 5, 10, 100]);
+            return {
+                q: `Wie viele Byte sind ${mib} MiB?`,
+                unit: "Byte",
+                ans: mib * 1048576,
+                sol: `1 MiB = 2²⁰ = 1'048'576 Byte\n${mib} × 1'048'576 = ${fmt(mib * 1048576)} Byte`
+            };
+        }
+    },
+    text: {
+        label: "Speicherbedarf Text / Bücher",
+        make() {
+            const s = pick([150, 200, 250, 300, 400]);
+            const z = pick([40, 50, 60]);
+            const c = pick([55, 60, 65, 70]);
+            const bytes = s * z * c;
+            if (Math.random() < 0.5) {
+                return {
+                    q: `Ein Buch hat ${s} Seiten à ${z} Zeilen mit je ${c} Zeichen (ASCII). Wie viele MB braucht es?`,
+                    unit: "MB",
+                    ans: bytes / 1e6,
+                    sol: `Zeichen = ${s} × ${z} × ${c} = ${fmt(bytes)} → 1 Zeichen = 1 Byte\n= ${fmt(bytes)} B = ${fmt(bytes / 1e6, 4)} MB`
+                };
+            }
+            const disk = pick([1, 2, 4]);
+            const n = Math.floor(disk * 1e12 / bytes);
+            return {
+                q: `Wie viele ganze Bücher (${s} Seiten à ${z} Zeilen à ${c} Zeichen, ASCII) passen auf eine ${disk}-TB-Festplatte? (1 KB = 1000 B)`,
+                unit: "Bücher",
+                ans: n,
+                sol: `1 Buch = ${s} × ${z} × ${c} = ${fmt(bytes)} Byte\n${disk} TB = ${fmt(disk * 1e12)} Byte\n${fmt(disk * 1e12)} / ${fmt(bytes)} = ${fmt(disk * 1e12 / bytes)} → abrunden: ${fmt(n)} Bücher`
+            };
+        }
+    },
+    bild: {
+        label: "Speicherbedarf Bild / Audio",
+        make() {
+            if (Math.random() < 0.5) {
+                const [w, h] = pick([[800, 600], [1280, 720], [1920, 1080], [2560, 1440], [3840, 2160], [4000, 3000]]);
+                const bit = pick([8, 16, 24, 32]);
+                const b = w * h * bit / 8;
+                return {
+                    q: `Ein unkomprimiertes Bild hat ${w} × ${h} Pixel mit ${bit} Bit Farbtiefe. Wie viele MB?`,
+                    unit: "MB",
+                    ans: b / 1e6,
+                    sol: `Pixel = ${w} × ${h} = ${fmt(w * h)}\nBit = ${fmt(w * h)} × ${bit} = ${fmt(w * h * bit)}\nByte = ÷ 8 = ${fmt(b)} B = ${fmt(b / 1e6, 3)} MB`
+                };
+            }
+            const min = pick([1, 2, 3, 4, 5, 10]);
+            const ch = pick([1, 2]);
+            const b = 44100 * 16 * ch * min * 60 / 8;
+            return {
+                q: `Wie viele MB braucht ${min} Minute${min > 1 ? "n" : ""} unkomprimiertes Audio in CD-Qualität (44'100 Hz, 16 Bit, ${ch === 2 ? "Stereo" : "Mono"})?`,
+                unit: "MB",
+                ans: b / 1e6,
+                sol: `Bit/s = 44'100 × 16 × ${ch} = ${fmt(44100 * 16 * ch)}\nSekunden = ${min} × 60 = ${min * 60}\nByte = ${fmt(44100 * 16 * ch)} × ${min * 60} ÷ 8 = ${fmt(b)} B = ${fmt(b / 1e6, 3)} MB`
+            };
+        }
+    },
+    leben: {
+        label: "Pro Stunde → Leben (LU05.A01/A02)",
+        make() {
+            const gbh = pick([0.5, 0.8, 1, 1.2, 1.3, 1.5, 2]);
+            const hd = pick([8, 12, 14, 16, 17, 18, 20]);
+            const y = pick([50, 60, 65, 70, 75, 80]);
+            const gb = gbh * hd * 365 * y;
+            return {
+                q: `Ein Mensch nimmt ${fmt(gbh)} GB pro Stunde auf, ${hd} Stunden pro Tag, während ${y} Jahren (365 Tage/Jahr). Wie viele TB sind das?`,
+                unit: "TB",
+                ans: gb / 1000,
+                sol: `Pro Tag: ${fmt(gbh)} GB × ${hd} = ${fmt(gbh * hd)} GB\nPro Jahr: × 365 = ${fmt(gbh * hd * 365)} GB\nLeben: × ${y} = ${fmt(gb)} GB\n÷ 1000 = ${fmt(gb / 1000)} TB`
+            };
+        }
+    },
+    note: {
+        label: "Note berechnen",
+        make() {
+            const max = pick([20, 24, 30, 36, 40, 45, 50]);
+            const p = rnd(Math.round(max * 0.3), max);
+            const n = Math.round((5 * p / max + 1) * 10) / 10;
+            return {
+                q: `Du hast ${p} von ${max} Punkten. Welche Note (auf 0.1 gerundet)?`,
+                unit: "Note",
+                ans: n,
+                sol: `Note = 5 × Punkte / Max + 1\n= 5 × ${p} / ${max} + 1 = ${fmt(5 * p / max + 1, 4)} → ${n.toFixed(1)}`
+            };
+        }
+    }
+};
+let cCur = null, cRight = 0, cTotal = 0, cDone = false;
+$("cType").innerHTML = `<option value="mix">Gemischt (alle Typen)</option>` +
+    Object.entries(CALC).map(([k, v]) => `<option value="${k}">${v.label}</option>`).join("");
+function cNew() {
+    const k = $("cType").value === "mix" ? pick(Object.keys(CALC)) : $("cType").value;
+    cCur = CALC[k].make();
+    cDone = false;
+    $("cText").textContent = cCur.q;
+    $("cUnit").textContent = cCur.unit;
+    $("cIn").value = "";
+    $("cFb").className = "fb";
+    $("cIn").focus({ preventScroll: true });
+}
+function cCheck() {
+    if (!cCur) return;
+    const v = parseNum($("cIn").value);
+    if (isNaN(v)) {
+        $("cFb").className = "fb no";
+        $("cFb").textContent = "Bitte eine Zahl eingeben.";
+        return;
+    }
+    const tol = Math.max(Math.abs(cCur.ans) * 0.01, 0.005);
+    const ok = Math.abs(v - cCur.ans) <= tol;
+    if (!cDone) {
+        cDone = true;
+        cTotal++;
+        if (ok) cRight++;
+        $("cScore").textContent = `${cRight} / ${cTotal}`;
+    }
+    $("cFb").className = "fb " + (ok ? "ok" : "no");
+    $("cFb").innerHTML = (ok ? "<b>Richtig!</b>" : `<b>Leider falsch.</b> Richtig: ${fmt(cCur.ans, 3)} ${cCur.unit}`) +
+        `<div class="solution"></div>`;
+    $("cFb").querySelector(".solution").textContent = cCur.sol;
+}
+$("cCheck").addEventListener("click", cCheck);
+$("cNew").addEventListener("click", cNew);
+$("cType").addEventListener("change", cNew);
+$("cIn").addEventListener("keydown", e => {
+    if (e.key === "Enter") { cDone && $("cFb").classList.contains("ok") ? cNew() : cCheck(); }
+});
+
+/* ---------------- Nutzwertanalyse ---------------- */
+const NWA = {
+    variants: ["Notebook A", "Notebook B", "Notebook C"],
+    rows: [
+        { k: "Preis", w: 30, p: [5, 3, 2] },
+        { k: "Akkulaufzeit", w: 25, p: [2, 4, 5] },
+        { k: "Gewicht", w: 20, p: [3, 4, 5] },
+        { k: "Leistung (CPU/RAM)", w: 15, p: [3, 5, 4] },
+        { k: "Anschlüsse", w: 10, p: [4, 3, 2] }
+    ]
+};
+function nwaRender() {
+    const t = $("nwaTable");
+    let h = `<tr><th>Kriterium</th><th>Gewicht %</th>` +
+        NWA.variants.map(v => `<th>${v}<br><span class="muted">Punkte (1–5)</span></th>`).join("") + `</tr>`;
+    NWA.rows.forEach((r, i) => {
+        h += `<tr><td>${r.k}</td><td><input type="number" min="0" max="100" data-w="${i}" value="${r.w}"></td>` +
+            r.p.map((p, j) => `<td><input type="number" min="1" max="5" data-r="${i}" data-v="${j}" value="${p}"> <span class="muted" id="tn${i}_${j}"></span></td>`).join("") + `</tr>`;
+    });
+    h += `<tr><td><b>Nutzwert</b></td><td id="wsum"></td>` + NWA.variants.map((v, j) => `<td id="sum${j}"></td>`).join("") + `</tr>`;
+    t.innerHTML = h;
+    t.querySelectorAll("input").forEach(inp => inp.addEventListener("input", () => {
+        const val = parseNum(inp.value);
+        if (inp.dataset.w !== undefined) NWA.rows[+inp.dataset.w].w = isNaN(val) ? 0 : val;
+        else NWA.rows[+inp.dataset.r].p[+inp.dataset.v] = isNaN(val) ? 0 : val;
+        nwaCalc();
+    }));
+    nwaCalc();
+}
+function nwaCalc() {
+    const wsum = NWA.rows.reduce((s, r) => s + r.w, 0);
+    $("wsum").innerHTML = `<b>${fmt(wsum)} %</b>`;
+    const sums = NWA.variants.map((v, j) => NWA.rows.reduce((s, r, i) => {
+        const tn = r.p[j] * r.w / 100;
+        $(`tn${i}_${j}`).textContent = "→ " + fmt(tn);
+        return s + tn;
+    }, 0));
+    const best = Math.max(...sums);
+    sums.forEach((s, j) => {
+        const c = $("sum" + j);
+        c.innerHTML = `<b>${fmt(s)}</b>`;
+        c.className = s === best ? "win" : "";
+    });
+    const winner = NWA.variants[sums.indexOf(best)];
+    $("nwaMsg").innerHTML = wsum !== 100
+        ? `<span style="color:var(--bad)">Die Gewichtungen ergeben ${fmt(wsum)} %, sie müssen zusammen 100 % ergeben.</span>`
+        : `Teilnutzen = Punkte × Gewicht ÷ 100. Empfehlung: <b>${winner}</b> mit dem höchsten Nutzwert ${fmt(best)}.`;
+}
+
+/* ---------------- Start ---------------- */
+kBuild();
+qShow();
+cNew();
+nwaRender();
+const lastTab = load("tab", "karten");
+const tabBtn = document.querySelector(`nav button[data-tab="${lastTab}"]`);
+if (tabBtn) tabBtn.click();
+</script>
+</body>
+</html>
