@@ -1,0 +1,56 @@
+body {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    background-color: #1e1e1e;
+    color: #eee;
+}
+
+header {
+    background-color: black;
+    padding: 10px 30px;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+}
+
+nav a {
+    color: #eee;
+}
+
+main {
+    width: 1000px;
+    margin: 0 auto;
+}
+
+/* Galerie */
+#galerie {
+    display: grid;
+    grid-template-column: repeat(3, 1fr);
+    gap: 10 px;
+}
+
+#galerie img {
+    width: 600px;
+}
+
+/* Tabelle */
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid #666;
+    padding: 8px;
+    text-align: left;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #999;
+}

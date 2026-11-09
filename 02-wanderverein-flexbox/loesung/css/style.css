@@ -1,0 +1,117 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Verdana, Arial, sans-serif;
+    background-color: #eef3ee;
+    color: #222;
+    line-height: 1.5;
+}
+
+h2 {
+    margin: 20px 0 10px;
+    color: #2e6b3a;
+}
+
+/* Kopfbereich */
+header {
+    background-color: #2e6b3a;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 10px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+}
+
+nav a:hover {
+    background-color: #24552e;
+}
+
+nav a.aktiv {
+    background-color: #f2b134;
+    color: #222;
+}
+
+/* Inhalt und Seitenleiste */
+.wrapper {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+}
+
+main {
+    flex: 1;
+}
+
+main img {
+    max-width: 100%;
+}
+
+aside {
+    width: 300px;
+    background-color: white;
+    padding: 20px;
+}
+
+aside ul {
+    margin-left: 20px;
+}
+
+/* Tour-Karten nebeneinander */
+.touren {
+    display: flex;
+    gap: 20px;
+}
+
+.tour {
+    flex: 1;
+    background-color: white;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.tour .info {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #2e6b3a;
+}
+
+/* Fussbereich */
+footer {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+footer a {
+    color: #f2b134;
+}
+
+/* Bonus: auf schmalen Bildschirmen untereinander */
+@media (max-width: 700px) {
+    .wrapper,
+    .touren {
+        flex-direction: column;
+    }
+
+    aside {
+        width: auto;
+    }
+}
